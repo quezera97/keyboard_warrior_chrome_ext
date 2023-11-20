@@ -3,7 +3,6 @@ const quoteDisplayElement = document.querySelector("#quoteDisplay");
 const quoteInputElement = document.querySelector("#quoteInput");
 const timerElement = document.querySelector("#timer");
 const wordsPerMinuteElement = document.querySelector("#wpm");
-const divider = document.querySelector("hr");
 
 quoteInputElement.addEventListener("input", () => {
   const quoteArray = quoteDisplayElement.querySelectorAll("span");
@@ -21,12 +20,10 @@ quoteInputElement.addEventListener("input", () => {
     } else if (character === characterSpan.textContent) {
       characterSpan.classList.add("right");
       characterSpan.classList.remove("wrong");
-      divider.classList.remove("halp");
       count++;
     } else {
       characterSpan.classList.remove("right");
       characterSpan.classList.add("wrong");
-      divider.classList.add("halp");
       right = false;
     }
   });
@@ -43,7 +40,7 @@ quoteInputElement.addEventListener("input", () => {
 });
 
 function getRandomQuote() {
-  return fetch(RANDOM_QUOTE_API_URL) //RANDOM_QUOTE_API_URL
+  return fetch(RANDOM_QUOTE_API_URL)
     .then((response) => response.json())
     .then((data) => data.content)
     .catch(error => console.log(error));

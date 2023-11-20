@@ -13,8 +13,8 @@
 body {
   width: 100vw;
   height: 100vh;
-  background: #fff;
-  color: #414244;
+  background: black;
+  color: gold;
 }
 
 main {
@@ -36,15 +36,6 @@ main {
   line-height: 1.4;
   letter-spacing: 0.1rem;
 }
-.quote-display::before {
-  content: open-quote;
-  position: absolute;
-  top: -5rem;
-  left: -2rem;
-  z-index: -1;
-  font-size: 10rem;
-  color: #d7d7d8;
-}
 
 .typing {
   position: relative;
@@ -54,18 +45,6 @@ main {
   align-items: start;
   width: 100%;
   height: 100%;
-}
-.typing:hover hr {
-  width: 75%;
-}
-
-hr {
-  grid-column: 1/-1;
-  margin-top: 1rem;
-  border: 0.25rem solid #4fb578;
-  width: 25%;
-  transition: width 300ms ease-in-out;
-  outline: 0;
 }
 
 .score {
@@ -94,6 +73,7 @@ hr {
   resize: none;
   outline: none;
   transition: border 300ms ease-in-out;
+  border: black 1px solid;
 }
 .quote-input::placeholder {
   color: #d7d7d8;
@@ -110,34 +90,4 @@ hr {
 .wrong {
   color: #b55648;
   text-decoration: line-through;
-}
-
-.halp {
-  position: relative;
-  border-color: #b55648;
-  animation: glitch 300ms;
-}
-
-@keyframes glitch {
-  0% {
-    transform: translateY(-2%);
-    border-color: #414244;
-    box-shadow: -1.5px 2.5px #4fa5b5;
-  }
-  15% {
-    transform: translateY(5%);
-    box-shadow: 2px -1px #d87dbb;
-  }
-  45% {
-    border-color: #d7d7d8;
-    box-shadow: 0.5px -2px #d7d7d8;
-  }
-  85% {
-    border-color: #b55648;
-    box-shadow: 1px -1.5px #d87dbb;
-  }
-  100% {
-    transform: translateX(-1%);
-    box-shadow: -0.5px 0.5px #4fa5b5;
-  }
 }

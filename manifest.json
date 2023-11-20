@@ -1,0 +1,19 @@
+{
+    "name": "Speed Type",
+    "version": "1.0.0",
+    "description": "Edit, create, delete and view your task list - with high and low priority included",
+    "manifest_version": 3,
+    "author": "QueZera",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "Speedtype"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "icons": {
+        "16": "assets/logo.png",
+        "48": "assets/logo.png",
+        "128": "assets/logo.png"
+    }
+}
