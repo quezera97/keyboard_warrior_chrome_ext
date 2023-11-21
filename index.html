@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Speed Typing Test</title>
+        <title>Speed Typing</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
         <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <main>
-            <div class="score-container">
-                <div class="timer">
-                    <span>Time:</span>
-                    <span id="timer">0</span>
+        <main> 
+            <div id="main-div">
+                <div class="score-container">
+                    <div class="timer">
+                        <span>Time:</span>
+                        <span id="timer">0</span>
+                    </div>
+                    <div>
+                        <span>Words/min:</span>
+                        <span id="wpm">0</span>
+                    </div>
                 </div>
-                <div>
-                    <span>Words/min:</span>
-                    <span id="wpm">0</span>
+                <div class="display-container" id="quoteDisplay" onCopy="return false" onCut="return false"><span></span></div>
+                <div class="input-container">
+                    <textarea class="quote-input" onPaste="return false" onDrop="return false" autocomplete=off name="quoteInput" id="quoteInput" placeholder="Type Here!">
+                    </textarea>
+                    <button class="reset-button" id="reset" hidden>Press 'Tab' to reset</button>
                 </div>
             </div>
-            <div class="display-container" id="quoteDisplay"><span></span></div>
-            <textarea class="quote-input" name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
         </main>
-        <script src="script.js"></script>
+        <script src="script/jquery-3.7.1.min.js"></script>
+        <script src="script/main.js"></script>
+        <script src="script/fetch-word.js"></script>
+        <script src="script/reset-word.js"></script>
     </body>
 </html>

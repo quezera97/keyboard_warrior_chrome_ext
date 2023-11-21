@@ -42,11 +42,17 @@ main {
   border-bottom: solid 1px;
 }
 
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
 .quote-input {
   height: 7rem;
   width: 100%;
   padding: 0 1rem;
   padding-top: 1.1rem;
+  resize: none;
   background: rgb(50, 49, 49);
   transition: border 300ms ease-in-out;
   color: gold;
@@ -64,4 +70,24 @@ main {
 .wrong {
   color: #b55648;
   text-decoration: line-through;
+}
+
+.overlay {
+  position: absolute;
+  background-color: rgb(50, 49, 49);
+  backdrop-filter: blur(5px);
+  z-index: 1;
+  opacity: 0.2;
+}
+
+.reset-button {
+  position: absolute;
+  margin-left: 35%;
+  margin-top: 5%;
+  z-index: 2;
+  display: none;
+  color: gold;
+  border: none;
+  background: none;
+  outline: none;
 }
