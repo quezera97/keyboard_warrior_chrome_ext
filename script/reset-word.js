@@ -5,6 +5,7 @@ $('#quoteInput').keydown(function (e) {
         $('#reset').show().focus();
         $('#quoteInput').addClass('overlay');
         $('#quoteInput').attr('disabled', true);
+        $('#reset-hint').hide();
     }
 });
 
@@ -18,5 +19,6 @@ $('#reset').keydown(function (e) {
         $('#quoteInput').focus();
         $('#quoteInput').removeClass('overlay');
         $('#quoteInput').attr('disabled', false);
+        $('#reset-hint').show();
     }
 });
