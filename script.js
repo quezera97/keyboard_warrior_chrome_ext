@@ -7,7 +7,7 @@ const wordsPerMinuteElement = document.querySelector("#wpm");
 quoteInputElement.addEventListener("input", () => {
   const quoteArray = quoteDisplayElement.querySelectorAll("span");
   const valueArray = quoteInputElement.value.split("");
-  let right = true;
+  let allWordsCorrect = true;
   let count = 0;
 
   quoteArray.forEach((characterSpan, i) => {
@@ -16,7 +16,7 @@ quoteInputElement.addEventListener("input", () => {
     if (character == null) {
       characterSpan.classList.remove("right");
       characterSpan.classList.remove("wrong");
-      right = false;
+      allWordsCorrect = false;
     } else if (character === characterSpan.textContent) {
       characterSpan.classList.add("right");
       characterSpan.classList.remove("wrong");
@@ -24,7 +24,7 @@ quoteInputElement.addEventListener("input", () => {
     } else {
       characterSpan.classList.remove("right");
       characterSpan.classList.add("wrong");
-      right = false;
+      allWordsCorrect = false;
     }
   });
 
@@ -36,7 +36,7 @@ quoteInputElement.addEventListener("input", () => {
     wordsPerMinuteElement.textContent = randomNumber;
   }
 
-  if (right) getNextQuote();
+  if (allWordsCorrect) getNextQuote();
 });
 
 function getRandomQuote() {

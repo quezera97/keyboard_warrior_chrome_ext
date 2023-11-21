@@ -8,20 +8,18 @@
     </head>
     <body>
         <main>
-            <div class="score">
+            <div class="score-container">
                 <div class="timer">
-                    <span class="timer__label">Time:</span>
-                    <span class="timer__text" id="timer">0</span>
+                    <span>Time:</span>
+                    <span id="timer">0</span>
                 </div>
                 <div>
                     <span>Words/min:</span>
                     <span id="wpm">0</span>
                 </div>
             </div>
-            <div class="quote-display" id="quoteDisplay"><span></span></div>
-            <section class="typing">
-                <textarea class="quote-input" name="quoteInput" id="quoteInput" placeholder="Start typing right here!" cdkFocusInitial></textarea>
-            </section>
+            <div class="display-container" id="quoteDisplay"><span></span></div>
+            <textarea class="quote-input" name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
         </main>
         <script src="script.js"></script>
     </body>

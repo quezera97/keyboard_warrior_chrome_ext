@@ -11,76 +11,50 @@
 }
 
 body {
-  width: 100vw;
-  height: 100vh;
-  background: black;
+  background: rgb(50, 49, 49);
   color: gold;
 }
 
 main {
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
-  width: 100%;
-  height: 100%;
-  padding: 3rem;
+  width: 800px;
+  height: 500px;
+  padding: 4rem;
 }
 
-.quote-display {
-  position: relative;
-  grid-row: 1/2;
-  align-self: end;
+.display-container {
+  margin-bottom: 1.5rem;
 }
-.quote-display span {
-  font-size: 2.25rem;
+
+.display-container span {
+  font-size: 1.1rem;
   font-weight: 800;
-  line-height: 1.4;
   letter-spacing: 0.1rem;
 }
 
-.typing {
+.score-container {
   position: relative;
-  grid-row: 2/-1;
-  display: grid;
-  grid-template-columns: 33% auto 2rem auto 2rem;
-  align-items: start;
-  width: 100%;
-  height: 100%;
-}
-
-.score {
-  position: relative;
-  grid-column: 3/-2;
   display: flex;
   justify-content: space-between;
-  z-index: 2;
   width: 100%;
-  margin-top: -1.375rem;
-  margin-bottom: -1rem;
-  background: #fff;
-  padding: 0.25rem 2rem;
-  box-shadow: 0 3px 6px rgba(52, 31, 97, 0.16), 0 3px 6px rgba(52, 31, 97, 0.23);
+  margin-top: -3rem;
+  margin-bottom: 20px;
+  background: rgb(50, 49, 49);
+  border-bottom: solid 1px;
 }
 
 .quote-input {
-  grid-column: 2/-1;
-  height: calc(50vh - 4rem);
+  height: 7rem;
   width: 100%;
   padding: 0 1rem;
-  padding-top: 2rem;
-  background: #fff;
-  border: 0;
-  border-radius: 0.2rem;
-  resize: none;
-  outline: none;
+  padding-top: 1.1rem;
+  background: rgb(50, 49, 49);
   transition: border 300ms ease-in-out;
-  border: black 1px solid;
+  color: gold;
+  border: 1.5px gold solid;
 }
-.quote-input::placeholder {
-  color: #d7d7d8;
-  transition: color 300ms ease-in-out;
-}
+
 .quote-input:hover::placeholder {
-  color: #4fb578;
+  color: gold;
 }
 
 .right {
