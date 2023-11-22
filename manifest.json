@@ -1,19 +1,19 @@
 {
-    "name": "Speed Type",
-    "version": "1.0.0",
+    "name": "Keyboard Warrior - Sparta",
+    "version": "1.0.1",
     "description": "Edit, create, delete and view your task list - with high and low priority included",
     "manifest_version": 3,
     "author": "QueZera",
     "action":{
         "default_popup": "index.html",
-        "default_title": "Speedtype"
+        "default_title": "Keyboard Warrior"
     },
     "permissions": [
         "storage"
     ],
     "icons": {
-        "16": "assets/logo.png",
-        "48": "assets/logo.png",
-        "128": "assets/logo.png"
+        "16": "assets/logo-16.png",
+        "48": "assets/logo-48.png",
+        "128": "assets/logo-128.png"
     }
 }
