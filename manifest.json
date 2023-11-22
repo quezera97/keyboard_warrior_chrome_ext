@@ -1,7 +1,7 @@
 {
     "name": "Keyboard Warrior - Sparta",
     "version": "1.0.1",
-    "description": "Edit, create, delete and view your task list - with high and low priority included",
+    "description": "KBW: Speed up your typing! Timed tests, custom exercises & progress tracking for all levels. Enhance your skills on the go!",
     "manifest_version": 3,
     "author": "QueZera",
     "action":{
