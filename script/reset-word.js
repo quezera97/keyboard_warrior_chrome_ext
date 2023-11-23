@@ -13,7 +13,7 @@ $('#reset').keydown(function (e) {
     if (e.key === 'Tab' || e.key === 'Escape') {
         e.preventDefault();
 
-        getNextQuote();
+        checkInternetConnection();
 
         $('#reset').hide();
         $('#quoteInput').focus();

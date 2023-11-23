@@ -19,6 +19,7 @@ main {
   width: 800px;
   height: 500px;
   padding: 4rem;
+  border: gold 1px solid;
 }
 
 .display-container {
@@ -86,6 +87,13 @@ main {
   margin-top: 5%;
   z-index: 2;
   display: none;
+  color: gold;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.quick-start {
   color: gold;
   border: none;
   background: none;

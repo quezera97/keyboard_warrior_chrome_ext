@@ -1,37 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Keyboard Warrior - Sparta</title>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="stylesheet" href="styles.css" />
-    </head>
-    <body>
-        <main> 
-            <div id="main-div">
-                <div class="score-container">
-                    <div class="timer">
-                        <span>Time:</span>
-                        <span id="timer">0</span>
-                    </div>
-                    <div>
-                        <span>Words/min:</span>
-                        <span id="wpm">0</span>
-                    </div>
+<body>
+    <main> 
+        <div>
+            <div class="score-container">
+                <div class="timer">
+                    <span>Time:</span>
+                    <span id="timer">0</span>
                 </div>
-                <div class="display-container" id="quoteDisplay" oncopy="return false" oncut="return false"><span></span></div>
-                <div class="input-container">
-                    <textarea class="quote-input" onpaste="return false" ondrop="return false" autocomplete=off name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
-                    <button class="reset-button" id="reset" hidden>Press 'Tab' to reset</button>
-                </div>
-                <div id="reset-hint">
-                    <p style="font-style: italic;">*Press Tab to reset</p>
+                <div>
+                    <span>Words/min:</span>
+                    <span id="wpm">0</span>
                 </div>
             </div>
-        </main>
-        <script src="script/jquery-3.7.1.min.js"></script>
-        <script src="script/main.js"></script>
-        <script src="script/fetch-word.js"></script>
-        <script src="script/reset-word.js"></script>
-    </body>
-</html>
+            <div class="display-container" id="quoteDisplay" oncopy="return false" oncut="return false"><span></span></div>
+            <div class="input-container">
+                <textarea class="quote-input" onpaste="return false" ondrop="return false" autocomplete=off name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
+                <button class="reset-button" id="reset" hidden>Press 'Tab' to reset</button>
+            </div>
+            <div id="reset-hint">
+                <p style="font-style: italic;">*Press Tab to reset</p>
+            </div>
+        </div>
+    </main>
+</body>
