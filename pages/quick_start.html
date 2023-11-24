@@ -1,24 +1,60 @@
-<body>
-    <main> 
-        <div>
-            <div class="score-container">
-                <div class="timer">
-                    <span>Time:</span>
-                    <span id="timer">0</span>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Keyboard Warrior - Sparta</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="../styles/styles.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <main> 
+            <div>
+                <div class="top-container">
+                    <div class="timer">
+                        <span>Time:</span>
+                        <span id="timer">0</span>
+                    </div>
+                    <div>
+                        <span>Accuracy (%):</span>
+                        <span id="accuracy">0</span>
+                    </div>
+                    <div>
+                        <span>Inaccuracy (%):</span>
+                        <span id="inaccuracy">0</span>
+                    </div>
+                    <div>
+                        <span>Words/min:</span>
+                        <span id="wpm">0</span>
+                    </div>
                 </div>
-                <div>
-                    <span>Words/min:</span>
-                    <span id="wpm">0</span>
+                <div class="display-container" id="quoteDisplay"><span></span></div>
+                <div class="input-container">
+                    <textarea class="quote-input" name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
+                    <button class="reset-button" id="reset" hidden>Press 'Tab' to reset</button>
+                    <button class="escape-button" id="escape" hidden>Press 'Escape' to escape</button>
+                </div>
+                <div id="reset-hint" class="bottom-container">
+                    <p style="font-style: italic; font-size: 15px;">*Press Tab to reset</p>
+                    <p style="font-style: italic; font-size: 15px;">*Press Esc to escape</p>
                 </div>
             </div>
-            <div class="display-container" id="quoteDisplay"><span></span></div>
-            <div class="input-container">
-                <textarea class="quote-input" name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
-                <button class="reset-button" id="reset" hidden>Press 'Tab' to reset</button>
-            </div>
-            <div id="reset-hint">
-                <p style="font-style: italic;">*Press Tab to reset</p>
-            </div>
-        </div>
-    </main>
-</body>
+        </main>
+        <script src="../script/jquery-3.7.1.min.js"></script>
+        <script src="../script/quick_start.js"></script>
+        <script>
+            // $(document).ready(function() {
+            //     $('#quoteDisplay').on('copy', function(e) {
+            //         e.preventDefault();
+            //     });
+
+            //     $('#quoteDisplay').on('contextmenu', function(e) {
+            //         e.preventDefault(); 
+            //     });
+
+            //     $('#quoteInput').on('paste', function(e) {
+            //         e.preventDefault();
+            //     });
+            // });
+        </script>
+    </body>
+</html>

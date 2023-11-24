@@ -17,7 +17,7 @@ body {
 
 main {
   width: 800px;
-  height: 500px;
+  height: 583px;
   padding: 4rem;
   border: gold 1px solid;
 }
@@ -32,15 +32,49 @@ main {
   letter-spacing: 0.1rem;
 }
 
-.score-container {
+.top-container {
   position: relative;
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-top: -3rem;
   margin-bottom: 20px;
-  background: rgb(50, 49, 49);
   border-bottom: solid 1px;
+}
+
+.bottom-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+  border-top: solid 1px;
+}
+
+.space-between-button {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.kids-level, .amateur-level, .pro-level, .legend-level {
+  color: gold;
+  background: none;
+  outline: gold 1px solid;
+  font-size: 20px;
+  padding: 5px;
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px gold;
+  }
+  100% {
+    box-shadow: 0 0 20px gold;
+  }
 }
 
 .input-container {
@@ -81,7 +115,7 @@ main {
   opacity: 0.2;
 }
 
-.reset-button {
+.reset-button, .escape-button {
   position: absolute;
   margin-left: 35%;
   margin-top: 5%;
@@ -94,10 +128,27 @@ main {
 }
 
 /* button */
-.quick-start, .try-again {
+.quick-start, .try-again-result, .escape-result {
   color: gold;
   border: none;
   background: none;
   outline: none;
-  font-size: 30px;
+  font-size: 20px;
+  font-style: italic;
+}
+
+/* table */
+.result-table {
+  border-collapse: collapse;
+  width: 350px;
+}
+
+.result-table td {
+  border: 2px solid #fff;
+  padding: 8px;
+  text-align: center;
+}
+
+.result-table td:first-child {
+  width: 175px;
 }

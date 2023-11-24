@@ -1,10 +1,40 @@
-<body>
-    <main> 
-        <div>
-            <p>Time : <span id="time-result"></span></p>
-            <p>WPM : <span id="wpm-result"></span></p>
-
-            <button id="try-again" class="try-again">TRY AGAIN</button>
-        </div>
-    </main>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Keyboard Warrior - Sparta</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="../styles/styles.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <main> 
+            <div>
+                <div class="top-container">
+                    <button id="escape-or-try-again" class="try-again-result">'Enter' to Try Again</button>
+                    <button id="escape-or-try-again" class="escape-result">'Escape' to escape</button>
+                </div>
+                <p>Results :</p>
+                <table class="result-table">
+                    <tr>
+                        <td>Time:</td>
+                        <td><span id="time-result"></span> sec</td>
+                    </tr>
+                    <tr>
+                        <td>WPM:</td>
+                        <td><span id="wpm-result"></span> words/min</td>
+                    </tr>
+                    <tr>
+                        <td>Accuracy (%):</td>
+                        <td><span id="accuracy-result"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Inaccuracy (%):</td>
+                        <td><span id="inaccuracy-result"></span></td>
+                    </tr>
+                </table>
+            </div>
+        </main>
+        <script src="../script/jquery-3.7.1.min.js"></script>
+        <script src="../script/result.js"></script>
+    </body>
+</html>

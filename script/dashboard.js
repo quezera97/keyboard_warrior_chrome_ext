@@ -1,31 +1,33 @@
 $( document ).ready(function() {
+    $('#body').keydown(function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            
+            window.location.href = 'pages/quick_start.html';
+        }
+    });
+
     $('#quick-start').click(function () {
-        fetch('pages/quick_start.html')
-        .then(response => response.text())
-        .then(content => {
-            document.getElementById('body').innerHTML = content;
+        window.location.href = 'pages/quick_start.html';
+    });
 
-            const stylesheets = [
-                'styles/styles.css'
-            ];
+    $('#kids-level').click(function () {
+        window.location.href = '../pages/quick_start.html' + 
+            '?level=kids';
+    });
 
-            stylesheets.forEach(stylesheetSrc => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = stylesheetSrc;
-                document.head.appendChild(link);
-            });
+    $('#amateur-level').click(function () {
+        window.location.href = '../pages/quick_start.html' + 
+            '?level=amateur';
+    });
 
-            const scripts = [
-                'script/jquery-3.7.1.min.js',
-                'script/quick_start.js',
-            ];
+    $('#pro-level').click(function () {
+        window.location.href = '../pages/quick_start.html' + 
+            '?level=pro';
+    });
 
-            scripts.forEach(scriptSrc => {
-                const script = document.createElement('script');
-                script.src = scriptSrc;
-                document.body.appendChild(script);
-            });
-        });
+    $('#legend-level').click(function () {
+        window.location.href = '../pages/quick_start.html' + 
+            '?level=legend';
     });
 });

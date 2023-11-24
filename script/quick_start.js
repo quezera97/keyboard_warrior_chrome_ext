@@ -1,7 +1,13 @@
 $( document ).ready(function() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const levelValue = urlParams.get('level');
+
     let startTime;
   
     checkInternetConnection();
+
+    $("#quoteInput").focus();
     
     function checkInternetConnection() {
         const isOnline = navigator.onLine;
@@ -28,7 +34,7 @@ $( document ).ready(function() {
     
     async function getOfflineQuote() {
         try {
-        const response = await fetch('assets/quotes.json');
+        const response = await fetch('assets/offline_quick_start-quotes.json');
         const data = await response.json();
         
         const keys = Object.keys(data);
@@ -43,17 +49,126 @@ $( document ).ready(function() {
     }
     
     async function getNextQuote() {
-        const quote = await getRandomQuote();
-    
-        displayQuote(quote);
+        switch (levelValue) {
+            case 'kids':
+                const kidsQuote = await getKidsQuote();
+                displayQuote(kidsQuote);
+                break;
+            case 'amateur':
+                const amateurQuote = await getAmateurQuote();
+                displayAmateurQuote(amateurQuote);
+                break;
+            case 'pro':
+                const proQuote = await getProQuote();
+                displayProQuote(proQuote);
+                break;
+            case 'legend':
+                const legendQuote = await getLegendQuote();
+                displayLegendQuote(legendQuote);
+                break;
+        
+            default:
+                const randomQuote = await getRandomQuote();
+                displayQuote(randomQuote);
+                break;
+        }
     }
-    
-    function displayQuote(quote) {
+
+    async function getKidsQuote() {
+        return fetch("https://api.quotable.io/quotes/random?maxLength=50")
+        .then((response) => response.json())
+        .then((data) => data[0].content)
+        .catch(error => console.log(error));
+    }
+    async function getAmateurQuote() {
+        return fetch("https://api.quotable.io/quotes/random?maxLength=150")
+        .then((response) => response.json())
+        .then((data) => data[0].content)
+        .catch(error => console.log(error));
+    }
+    async function getProQuote() {
+        return fetch("https://api.quotable.io/quotes/random?minLength=100&maxLength=110")
+        .then((response) => response.json())
+        .then((data) => data[0].content)
+        .catch(error => console.log(error));
+    }
+    async function getLegendQuote() {
+        return fetch("https://api.quotable.io/quotes/random?minLength=100&maxLength=110")
+        .then((response) => response.json())
+        .then((data) => data[0].content)
+        .catch(error => console.log(error));
+    }
+    async function getRandomQuote() {
+        return fetch("https://api.quotable.io/random")
+        .then((response) => response.json())
+        .then((data) => data.content)
+        .catch(error => console.log(error));
+    }
+
+    function displayAmateurQuote(quote) {
         $("#quoteDisplay").empty();
     
-        $.each(quote.split(""), (_, character) => {
-        const characterSpan = $("<span>").text(character);
-        $("#quoteDisplay").append(characterSpan);
+        quote.split("").forEach((character, index) => {
+            const randomCaseCharacter = Math.random() < 0.5 ? character.toUpperCase() : character;
+            
+            const characterSpan = $("<span>")
+                .text(randomCaseCharacter)
+                .addClass('character');
+            
+            $("#quoteDisplay").append(characterSpan);
+        });
+        
+    
+        $("#quoteInput").val("").focus();
+    
+        startTimer();
+    }
+
+    function displayProQuote(quote) {
+        $("#quoteDisplay").empty();
+    
+        quote.split("").forEach((character, index) => {
+            const randomNumber = Math.floor(Math.random() * 9) + 1;
+            const randomCaseCharacter = Math.random() < 0.5 ? character.toUpperCase() : character;
+
+            const characterSpan = $("<span>")
+                .text(randomCaseCharacter)
+                .addClass('character');
+        
+            const numberSpan = $("<span>")
+                .text(randomNumber)
+                .addClass('random-letter');
+
+            $("#quoteDisplay").append(numberSpan).append(characterSpan).append(numberSpan);
+        });
+    
+        $("#quoteInput").val("").focus();
+    
+        startTimer();
+    }
+
+    function displayLegendQuote(quote) {
+        $("#quoteDisplay").empty();
+        const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '[', ']', '{', '}', '|', ';', ':', '<', '>', ',', '.', '?', '/'];
+    
+        quote.split("").forEach((character, index) => {
+            const randomNumber = Math.floor(Math.random() * 9) + 1;
+            const randomSpecialCharacter = specialCharacters[Math.floor(Math.random() * specialCharacters.length)];
+            const randomCaseCharacter = Math.random() < 0.5 ? character.toUpperCase() : character;
+            
+            const characterSpan = $("<span>")
+                .text(randomCaseCharacter)
+                .addClass('character');
+
+            const specialCharSpan = $("<span>")
+                .text(randomSpecialCharacter)
+                .addClass('special-character');
+        
+            const numberSpan = $("<span>")
+                .text(randomNumber)
+                .addClass('random-letter');
+
+            $("#quoteDisplay").append(numberSpan).append(characterSpan).append(specialCharSpan);
         });
     
         $("#quoteInput").val("").focus();
@@ -61,11 +176,18 @@ $( document ).ready(function() {
         startTimer();
     }
     
-    async function getRandomQuote() {
-        return fetch("https://api.quotable.io/random")
-        .then((response) => response.json())
-        .then((data) => data.content)
-        .catch(error => console.log(error));
+    
+    function displayQuote(quote) {
+        $("#quoteDisplay").empty();
+    
+        $.each(quote.split(""), (_, character) => {
+            const characterSpan = $("<span>").text(character);
+            $("#quoteDisplay").append(characterSpan);
+        });
+    
+        $("#quoteInput").val("").focus();
+    
+        startTimer();
     }
     
     function startTimer() {
@@ -83,40 +205,48 @@ $( document ).ready(function() {
     $('#quoteInput').on("input", () => {
         const quoteArray = $("#quoteDisplay").find("span").toArray();
         const valueArray = $("#quoteInput").val().split("");
-        let allWordsCorrect = true;
-        let count = 0;
+        let correctCharsCount = 0;
+        let wrongCharsCount = 0;
+        let totalCharsCount = 0;
         
         quoteArray.forEach((characterSpan, i) => {
             const character = valueArray[i];
-        
+            console.log(character);
+    
             if (character == null) {
                 $(characterSpan).removeClass("right wrong");
-                allWordsCorrect = false;
             } else if (character === $(characterSpan).text()) {
                 $(characterSpan).addClass("right").removeClass("wrong");
-                count++;
+                correctCharsCount++;
             } else {
                 $(characterSpan).removeClass("right").addClass("wrong");
-                allWordsCorrect = false;
+                wrongCharsCount++;
             }
+    
+            totalCharsCount++;
         });
-        
-        let calculateWpm = Math.round(count * 60 / (getTimerTime() * 5) * 10) / 10;
-        
-        if (isNaN(calculateWpm)) {
+    
+        const calculateWpm = Math.round(correctCharsCount * 60 / (getTimerTime() * 5) * 10) / 10;
+    
+        if (isNaN(calculateWpm) || calculateWpm < 0) {
             $("#wpm").text("0");
         } else {
             $("#wpm").text(calculateWpm);
         }
-        
-        if (allWordsCorrect) {
-            checkInternetConnection();
-            // fetchResultPage();
+    
+        const inAccuracyPercentage = (wrongCharsCount / totalCharsCount) * 100;
+        $("#inaccuracy").text(inAccuracyPercentage.toFixed(2) + "%");
+
+        const accuracyPercentage = (correctCharsCount / totalCharsCount) * 100;
+        $("#accuracy").text(accuracyPercentage.toFixed(2) + "%");
+    
+        if (valueArray.length === totalCharsCount) {
+            fetchResultPage();
         }
     });
-
+    
     $('#quoteInput').keydown(function (e) {
-        if (e.key === 'Tab' || e.key === 'Escape') {
+        if (e.key === 'Tab') {
             e.preventDefault();
             
             $('#reset').show().focus();
@@ -124,10 +254,18 @@ $( document ).ready(function() {
             $('#quoteInput').attr('disabled', true);
             $('#reset-hint').hide();
         }
+        else  if (e.key === 'Escape') {
+            e.preventDefault();
+
+            $('#escape').show().focus();
+            $('#quoteInput').addClass('overlay');
+            $('#quoteInput').attr('disabled', true);
+            $('#reset-hint').hide();
+        }
     });
 
     $('#reset').keydown(function (e) {
-        if (e.key === 'Tab' || e.key === 'Escape') {
+        if (e.key === 'Tab') {
             e.preventDefault();
 
             checkInternetConnection();
@@ -140,38 +278,24 @@ $( document ).ready(function() {
         }
     });
 
+    $('#escape').keydown(function (e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+
+            window.location.href = '../dashboard.html';
+        }
+    });
+
     function fetchResultPage() {
-        var wpm = $('#wpm').text();
-
-        fetch('pages/result.html')
-        .then(response => response.text())
-        .then(content => {
-            document.getElementById('body').innerHTML = content;
-
-            $('#time-result').text(getTimerTime());
-            $('#wpm-result').text(wpm);
-            
-            const stylesheets = [
-                'styles/styles.css'
-            ];
-
-            stylesheets.forEach(stylesheetSrc => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = stylesheetSrc;
-                document.head.appendChild(link);
-            });
-
-            const scripts = [
-                'script/jquery-3.7.1.min.js',
-                'script/result.js',
-            ];
-
-            scripts.forEach(scriptSrc => {
-                const script = document.createElement('script');
-                script.src = scriptSrc;
-                document.body.appendChild(script);
-            });
-        });
+        var wpm = $("#wpm").text();
+        var inaccuracy =$("#inaccuracy").text();
+        var accuracy =$("#accuracy").text();
+        var time = $("#timer").text();
+        window.location.href = '../pages/result.html' + 
+            '?level=' + encodeURIComponent(levelValue) + 
+            '&wpm=' + encodeURIComponent(wpm) + 
+            '&timer=' + encodeURIComponent(time) + 
+            '&accuracy=' + encodeURIComponent(accuracy) +
+            '&inaccuracy=' + encodeURIComponent(inaccuracy);
     }
 });
