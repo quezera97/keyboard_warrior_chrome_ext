@@ -93,9 +93,11 @@ main {
   outline: none;
 }
 
-.quick-start {
+/* button */
+.quick-start, .try-again {
   color: gold;
   border: none;
   background: none;
   outline: none;
+  font-size: 30px;
 }
