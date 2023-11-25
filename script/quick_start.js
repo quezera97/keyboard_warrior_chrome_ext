@@ -4,10 +4,14 @@ $( document ).ready(function() {
     const levelValue = urlParams.get('level');
 
     let startTime;
+    
+    let timerInterval;
+    let isPaused = false;
   
     checkInternetConnection();
 
     $("#quoteInput").focus();
+    $('#readyIndicator').hide();
     
     function checkInternetConnection() {
         const isOnline = navigator.onLine;
@@ -189,17 +193,35 @@ $( document ).ready(function() {
     
         startTimer();
     }
-    
+
     function startTimer() {
-            $("#timer").text(0);
-            startTime = new Date();
-            setInterval(() => {
-            $("#timer").text(getTimerTime());
+        $("#timer").text(0);
+        startTime = new Date();
+    
+        timerInterval = setInterval(() => {
+            if (!isPaused) {
+                $("#timer").text(getTimerTime());
+            }
         }, 1000);
+    }
+
+    function pauseTimer() {
+        if (!isPaused) {
+            clearInterval(timerInterval);
+            isPaused = true;
+        }
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        $("#timer").text(0);
+        isPaused = false;
     }
     
     function getTimerTime() {
-        return Math.floor((new Date() - startTime) / 1000);
+        let currentTime = new Date() - startTime;
+        let seconds = Math.floor(currentTime / 1000);
+        return seconds;
     }
 
     $('#quoteInput').on("input", () => {
@@ -225,6 +247,8 @@ $( document ).ready(function() {
     
             totalCharsCount++;
         });
+
+        $('#quoteInput').focus();
     
         const calculateWpm = Math.round(correctCharsCount * 60 / (getTimerTime() * 5) * 10) / 10;
     
@@ -248,7 +272,9 @@ $( document ).ready(function() {
     $('#quoteInput').keydown(function (e) {
         if (e.key === 'Tab') {
             e.preventDefault();
-            
+
+            pauseTimer();
+
             $('#reset').show().focus();
             $('#quoteInput').addClass('overlay');
             $('#quoteInput').attr('disabled', true);
@@ -256,6 +282,8 @@ $( document ).ready(function() {
         }
         else  if (e.key === 'Escape') {
             e.preventDefault();
+
+            pauseTimer();
 
             $('#escape').show().focus();
             $('#quoteInput').addClass('overlay');
@@ -269,12 +297,21 @@ $( document ).ready(function() {
             e.preventDefault();
 
             checkInternetConnection();
-
+            
             $('#reset').hide();
-            $('#quoteInput').focus();
-            $('#quoteInput').removeClass('overlay');
-            $('#quoteInput').attr('disabled', false);
-            $('#reset-hint').show();
+            
+            $('#readyIndicator').show();
+            
+            setTimeout(function() {
+                $('#readyIndicator').hide();
+                $('#quoteInput').removeClass('overlay');
+                $('#quoteInput').attr('disabled', false);
+                $('#reset-hint').show();
+                $('#quoteInput').focus();
+
+                resetTimer();
+                startTimer();
+            }, 1000);
         }
     });
 
@@ -298,4 +335,16 @@ $( document ).ready(function() {
             '&accuracy=' + encodeURIComponent(accuracy) +
             '&inaccuracy=' + encodeURIComponent(inaccuracy);
     }
+
+    $('#quoteDisplay').on('copy', function(e) {
+        e.preventDefault();
+    });
+
+    $('#quoteDisplay').on('contextmenu', function(e) {
+        e.preventDefault(); 
+    });
+
+    $('#quoteInput').on('paste', function(e) {
+        e.preventDefault();
+    });
 });

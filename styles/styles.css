@@ -59,7 +59,7 @@ main {
   margin-bottom: 20px;
 }
 
-.kids-level, .amateur-level, .pro-level, .legend-level {
+.kids-level, .amateur-level, .pro-level, .legend-level, .custom-level {
   color: gold;
   background: none;
   outline: gold 1px solid;
@@ -119,6 +119,7 @@ main {
   position: absolute;
   margin-left: 35%;
   margin-top: 5%;
+  font-size: 20px;
   z-index: 2;
   display: none;
   color: gold;
@@ -127,7 +128,7 @@ main {
   outline: none;
 }
 
-/* button */
+/* button*/
 .quick-start, .try-again-result, .escape-result {
   color: gold;
   border: none;
@@ -151,4 +152,46 @@ main {
 
 .result-table td:first-child {
   width: 175px;
+}
+
+/* ready word */
+.ready-indicator {
+  position: absolute;
+  margin-left: 35%;
+  margin-top: 6%;
+  z-index: 2;
+  width: 200px;
+  text-align: center;
+}
+
+@keyframes showLetters {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.ready-indicator span {
+  font-size: 30px;
+  display: inline-block;
+  opacity: 0;
+  animation: showLetters 4s linear infinite;
+}
+
+.ready-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+.ready-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.ready-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
 }

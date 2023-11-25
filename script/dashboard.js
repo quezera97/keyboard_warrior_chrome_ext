@@ -30,4 +30,8 @@ $( document ).ready(function() {
         window.location.href = '../pages/quick_start.html' + 
             '?level=legend';
     });
+
+    $('#custom-level').click(function () {
+        window.location.href = '../pages/custom_words.html'
+    });
 });
