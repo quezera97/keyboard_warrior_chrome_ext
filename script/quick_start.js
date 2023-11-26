@@ -38,20 +38,38 @@ $( document ).ready(function() {
     
     async function getOfflineQuote() {
         try {
-        const response = await fetch('assets/offline_quick_start-quotes.json');
-        const data = await response.json();
+            const response = await fetch('/assets/offline_quick_start-quotes.json');
+            const data = await response.json();
+            
+            const keys = Object.keys(data);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const quote = data[randomKey];
         
-        const keys = Object.keys(data);
-        const randomKey = keys[Math.floor(Math.random() * keys.length)];
-        const quote = data[randomKey];
-    
-        displayQuote(quote);
-        
+            switch (levelValue) {
+                case 'kids':
+                    displayQuote(quote);
+                    break;
+                case 'amateur':
+                    displayAmateurQuote(quote);
+                    break;
+                case 'pro':
+                    displayProQuote(quote);
+                    break;
+                case 'legend':
+                    displayLegendQuote(quote);
+                    break;
+            
+                default:
+                    displayQuote(quote);
+                    break;
+            }
+
         } catch (error) {
-        console.error('Error fetching or displaying quote:', error);
+            console.error('Error fetching or displaying quote:', error);
         }
     }
     
+
     async function getNextQuote() {
         switch (levelValue) {
             case 'kids':
@@ -69,6 +87,17 @@ $( document ).ready(function() {
             case 'legend':
                 const legendQuote = await getLegendQuote();
                 displayLegendQuote(legendQuote);
+                break;
+            case 'custom':
+
+                const numbersValue = urlParams.get('numbers');
+                const specialCharValue = urlParams.get('specialChar');
+                const autoCapitalizeValue = urlParams.get('autoCapitalize');
+                const minLengthValue = urlParams.get('minLength');
+                const maxLengthValue = urlParams.get('maxLength');
+
+                const customQuote = await getCustomQuote(minLengthValue, maxLengthValue);
+                displayCustomQuote(customQuote, numbersValue, specialCharValue, autoCapitalizeValue);
                 break;
         
             default:
@@ -98,6 +127,12 @@ $( document ).ready(function() {
     }
     async function getLegendQuote() {
         return fetch("https://api.quotable.io/quotes/random?minLength=100&maxLength=110")
+        .then((response) => response.json())
+        .then((data) => data[0].content)
+        .catch(error => console.log(error));
+    }
+    async function getCustomQuote(minLength, maxLength) {
+        return fetch("https://api.quotable.io/quotes/random?"+minLength+"&maxLength="+maxLength)
         .then((response) => response.json())
         .then((data) => data[0].content)
         .catch(error => console.log(error));
@@ -173,6 +208,50 @@ $( document ).ready(function() {
                 .addClass('random-letter');
 
             $("#quoteDisplay").append(numberSpan).append(characterSpan).append(specialCharSpan);
+        });
+    
+        $("#quoteInput").val("").focus();
+    
+        startTimer();
+    }
+    function displayCustomQuote(quote, number, special, capital) {
+        $("#quoteDisplay").empty();
+
+        const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '[', ']', '{', '}', '|', ';', ':', '<', '>', ',', '.', '?', '/'];
+    
+        quote.split("").forEach((character, index) => {
+            if(number == 'true'){
+                const randomNumber = Math.floor(Math.random() * 9) + 1;
+                const numberSpan = $("<span>")
+                    .text(randomNumber)
+                    .addClass('random-letter');
+
+                $("#quoteDisplay").append(numberSpan);
+            }
+
+            if(capital == true){
+                const randomCaseCharacter = Math.random() < 0.5 ? character.toUpperCase() : character;
+                const characterSpan = $("<span>")
+                    .text(randomCaseCharacter)
+                    .addClass('character');
+                $("#quoteDisplay").append(characterSpan)
+            }
+            else{
+                const characterSpan = $("<span>")
+                .text(character)
+                .addClass('character');
+                $("#quoteDisplay").append(characterSpan)
+            }
+            
+            
+            if(special == 'true'){
+                const randomSpecialCharacter = specialCharacters[Math.floor(Math.random() * specialCharacters.length)];
+                const specialCharSpan = $("<span>")
+                    .text(randomSpecialCharacter)
+                    .addClass('special-character');
+
+                $("#quoteDisplay").append(specialCharSpan)
+            }
         });
     
         $("#quoteInput").val("").focus();
@@ -319,7 +398,13 @@ $( document ).ready(function() {
         if (e.key === 'Escape') {
             e.preventDefault();
 
-            window.location.href = '../dashboard.html';
+            if(levelValue == 'custom'){
+                window.location.href = '../pages/custom_words.html';
+            }
+            else{
+                window.location.href = '../dashboard.html';
+            }
+
         }
     });
 

@@ -1,4 +1,11 @@
 $( document ).ready(function() {
+    var audioSparta = new Audio('/assets/intro_sparta.mp3');
+    var audioBackground = new Audio('/assets/intro.mp3');
+    
+    audioSparta.volume = 0.7;
+    audioSparta.play();
+    audioBackground.play();
+
     $('#body').keydown(function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();

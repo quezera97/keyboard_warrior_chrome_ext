@@ -6,25 +6,73 @@
         <meta name="viewport" content="width=device-width" />
         <link href="../styles/styles.css" rel="stylesheet"/>
     </head>
-    <body>
+    <body id="body_custom_words">
         <main> 
             <div>
-                <table class="result-table">
-                    <tr>
-                        <td>Character:</td>
-                    </tr>
+                <div class="top-container">
+                    <button id="escape-to-back" class="escape-result">'Escape' to Main Page</button>
+                </div>
+                <table class="normal-table">
                     <tr>
                         <td>Numbers:</td>
+                        <td>
+                            <label class="switch">
+                                <input id="custom-numbers" type="checkbox">
+                                <span class="click-slide round"></span>
+                            </label>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Special Characters:</td>
+                        <td>Special Char:</td>
+                        <td>
+                            <label class="switch">
+                                <input id="custom-special-chars" type="checkbox">
+                                <span class="click-slide round"></span>
+                            </label>
+                        </td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td>Auto Capitalize:</td>
+                        <td>
+                            <label class="switch">
+                                <input id="custom-auto-capitalize" type="checkbox">
+                                <span class="click-slide round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p style="font-size: 15px;">*Lower the minimum length to get more variations of words</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Min Length:</td>
+                        <td>
+                            <div class="slidecontainer">
+                                <input type="range" min="0" max="300" value="0" class="slider" id="custom-min-length">
+                                <p><span id="min-length-value"></span></p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Max Length:</td>
+                        <td>
+                            <div class="slidecontainer">
+                                <input type="range" min="100" max="300" value="100" class="slider" id="custom-max-length">
+                                <p><span id="max-length-value"></span></p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="generate-custom" class="generate-custom" style="margin: 15px;">Generate</button>
+                        </td>
                     </tr>
                 </table>
             </div>
         </main>
         <script src="../script/jquery-3.7.1.min.js"></script>
+        <script src="../script/custom_words.js"></script>
     </body>
 </html>
+
