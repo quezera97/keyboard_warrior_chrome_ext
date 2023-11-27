@@ -321,7 +321,6 @@ $( document ).ready(function() {
         
         quoteArray.forEach((characterSpan, i) => {
             const character = valueArray[i];
-            console.log(character);
     
             if (character == null) {
                 $(characterSpan).removeClass("right wrong");
@@ -347,10 +346,10 @@ $( document ).ready(function() {
         }
     
         const inAccuracyPercentage = (wrongCharsCount / totalCharsCount) * 100;
-        $("#inaccuracy").text(inAccuracyPercentage.toFixed(2) + "%");
+        $("#inaccuracy").text(inAccuracyPercentage.toFixed(2));
 
         const accuracyPercentage = (correctCharsCount / totalCharsCount) * 100;
-        $("#accuracy").text(accuracyPercentage.toFixed(2) + "%");
+        $("#accuracy").text(accuracyPercentage.toFixed(2));
     
         if (valueArray.length === totalCharsCount) {
             fetchResultPage();

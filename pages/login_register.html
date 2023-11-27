@@ -4,9 +4,10 @@
         <title>Keyboard Warrior - Sparta</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <link href="/styles/styles.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/styles/styles.css"/>
+        <link rel="stylesheet" href="/styles/login_register.css">
     </head>
-    <body id="body">
+    <body id="body_login_register">
         <main>
             <div>
                 <div class="top-container">
@@ -29,15 +30,55 @@
                         </a>
                     </div>
                 </div>
-                <div class="input-text-container">
-                    Login
-                    <input id="username-input" class="input-text" type="text" title="" placeholder="Username"/>
-                    <input id="email-input" class="input-text" type="text" title="" placeholder="Email"/>
-                    <input id="verify-email-input" class="input-text" type="text" title="" placeholder="Verify Email"/>
-                    <input id="password-input" class="input-text" type="text" title="" placeholder="Password"/>
-                    <input id="verify-password-input" class="input-text" type="text" title="" placeholder="Verify Password"/>
+                <div class="login-wrap">
+                    <div class="login-html">
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+                        <input id="tab-2" type="radio" name="tab" class="register"><label for="tab-2" class="tab">Register</label>
+                        <div class="login-form">
+                            <div class="sign-in-htm">
+                                <div class="group">
+                                    <label for="email_login" class="label">Email Address</label>
+                                    <input id="email_login" type="email" class="input">
+                                </div>
+                                <div class="group">
+                                    <label for="password_login" class="label">Password</label>
+                                    <input id="password_login" type="password" class="input" data-type="password">
+                                </div>
+                                <div class="group">
+                                    <input id="check" type="checkbox" class="check" checked>
+                                    <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                                </div>
+                                <div class="group">
+                                    <button id="submit_login" class="button">Submit</button>
+                                </div>
+                            </div>
+                            <div class="register-htm">
+                                <div class="group">
+                                    <label for="username_register" class="label">Username</label>
+                                    <input id="username_register" type="text" class="input">
+                                </div>
+                                <div class="group">
+                                    <label for="email_register" class="label">Email Address</label>
+                                    <input id="email_register" type="email" class="input">
+                                </div>
+                                <div class="group">
+                                    <label for="password_register" class="label">Password</label>
+                                    <input id="password_register" type="password" class="input" data-type="password">
+                                </div>
+                                <div class="group">
+                                    <label for="repeat_password_register" class="label">Repeat Password</label>
+                                    <input id="repeat_password_register" type="password" class="input" data-type="password">
+                                </div>
+                                <div class="group">
+                                    <button id="submit_register" class="button">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
+        <script src="../script/jquery-3.7.1.min.js"></script>
+        <script type="module" src="/script/login_register.js"></script>
     </body>
 </html>

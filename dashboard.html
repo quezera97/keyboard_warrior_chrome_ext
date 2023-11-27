@@ -4,19 +4,24 @@
         <title>Keyboard Warrior - Sparta</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <link href="styles/styles.css" rel="stylesheet"/>
+        <link href="styles/styles.css" rel="stylesheet"/>        
     </head>
     <body id="body">
         <main>
             <div>
                 <div class="top-container">
-                    <div>
+                    <div id="faction-selection-container">
                         <b style="font-weight: bold;">CHOOSE YOUR FACTIONS: </b>
                         <button id="login-user" class="login-button" data-toggle="tooltip" data-placement="bottom" title="User Login"> 
                             <img height="25px" src="assets/spartan.png" alt="">
                         </button>
                         <button id="login-google" class="login-button" data-toggle="tooltip" data-placement="bottom" title="Google Login"> 
                             <img height="25px" src="assets/google.png" alt="">
+                        </button>
+                    </div>
+                    <div id="user-profile-container">
+                        <button id="user-profile" class="login-button" data-toggle="tooltip" data-placement="bottom" title="User Login"> 
+                            <img height="25px" src="assets/spartan.png" alt="">
                         </button>
                     </div>
                     <div>
@@ -44,11 +49,39 @@
                 <br>
                 <button id="quick-start" class="quick-start">'Enter' to Quick Start</button>
                 <br>
+                <table class="normal-table">
+                    <tr>
+                        <td>Scoreboard</td>
+                        <td>Helots</td>
+                        <td>Perioikoi</td>
+                        <td>Spartans</td>
+                        <td>Gods</td>
+                    </tr>
+                    <tr>
+                        <td>Time:</td>
+                        <td><span id="kids-time-result"></span> sec</td>
+                        <td><span id="amateur-time-result"></span> sec</td>
+                        <td><span id="pro-time-result"></span> sec</td>
+                        <td><span id="legend-time-result"></span> sec</td>
+                    </tr>
+                    <tr>
+                        <td>WPM:</td>
+                        <td><span id="kids-wpm-result"></span> w/m</td>
+                        <td><span id="amateur-wpm-result"></span> w/m</td>
+                        <td><span id="pro-wpm-result"></span> w/m</td>
+                        <td><span id="legend-wpm-result"></span> w/m</td>
+                    </tr>
+                    <tr>
+                        <td>Accuracy:</td>
+                        <td><span id="kids-accuracy-result"></span> %</td>
+                        <td><span id="amateur-accuracy-result"></span> %</td>
+                        <td><span id="pro-accuracy-result"></span> %</td>
+                        <td><span id="legend-accuracy-result"></span> %</td>
+                    </tr>
+                </table>
                 <br>
                 <p class="title-future-updates">Future updates:</p>
                 <ol>
-                    <li>Login by Google Account to compete all over the world</li>
-                    <li>Store statistic online</li>
                     <li>Ranking system</li>
                     <li>Choose language (maybe)</li>
                     <li>Party competition / PVP</li>
@@ -56,6 +89,6 @@
             </div>
         </main>
         <script src="script/jquery-3.7.1.min.js"></script>
-        <script src="script/dashboard.js"></script>
+        <script type="module" src="script/dashboard.js"></script>
     </body>
 </html>

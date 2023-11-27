@@ -140,7 +140,12 @@ main {
 /* table */
 .normal-table {
   border-collapse: collapse;
-  width: 350px;
+  width: 100%;
+}
+.login-register-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-left: 30px;
 }
 
 .normal-table td {
@@ -223,101 +228,8 @@ main {
   font-size: 19px;
 }
 
-/* The switch - the box around the click-slide */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 55px;
-  height: 25px;
-  margin-top: 5px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The click-slide */
-.click-slide {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.click-slide:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 5px;
-  bottom: 3px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .click-slide {
-  background-color: #2196F3;
-}
-
-input:focus + .click-slide {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .click-slide:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded click-slides */
-.click-slide.round {
-  border-radius: 34px;
-}
-
-.click-slide.round:before {
-  border-radius: 50%;
-}
-
-/* slider */
-.slidecontainer {
-  width: 100%;
-}
-
-.slider {
-  width: 100%;
-  height: 10px;
-  border-radius: 5px;
-  background: gold;
-  outline: none;
-  opacity: 1.0;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-}
-
 .google {
   background-color: none;
   letter-spacing: 1px;
   padding-left: 10px;
-}
-
-.input-text-container input{
-  display: block;
-  margin-bottom: 10px;
-}
-
-.input-text {
-  color: gold;
-  background: none;
-  outline: gold 1px solid;
-  padding: 5px;
-  border: none;
 }

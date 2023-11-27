@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width" />
         <link href="../styles/styles.css" rel="stylesheet"/>
     </head>
-    <body>
+    <body id="result-body">
         <main> 
             <div>
                 <div class="top-container">
@@ -24,17 +24,17 @@
                         <td><span id="wpm-result"></span> words/min</td>
                     </tr>
                     <tr>
-                        <td>Accuracy (%):</td>
-                        <td><span id="accuracy-result"></span></td>
+                        <td>Accuracy:</td>
+                        <td><span id="accuracy-result"></span> %</td>
                     </tr>
                     <tr>
-                        <td>Inaccuracy (%):</td>
-                        <td><span id="inaccuracy-result"></span></td>
+                        <td>Inaccuracy:</td>
+                        <td><span id="inaccuracy-result"></span> %</td>
                     </tr>
                 </table>
             </div>
         </main>
         <script src="../script/jquery-3.7.1.min.js"></script>
-        <script src="../script/result.js"></script>
+        <script  type="module" src="../script/result.js"></script>
     </body>
 </html>
