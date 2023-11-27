@@ -51,6 +51,13 @@ main {
   border-top: solid 1px;
 }
 
+.login-button {
+  color: gold;
+  background: none;
+  border: none;
+  outline: none;
+}
+
 .kids-level, .amateur-level, .pro-level, .legend-level, .custom-level, .generate-custom {
   color: gold;
   background: none;
@@ -69,7 +76,7 @@ main {
   }
 }
 
-.input-container {
+.input-quote-container {
   position: relative;
   width: 100%;
 }
@@ -294,4 +301,23 @@ input:checked + .click-slide:before {
   opacity: 1.0;
   -webkit-transition: .2s;
   transition: opacity .2s;
+}
+
+.google {
+  background-color: none;
+  letter-spacing: 1px;
+  padding-left: 10px;
+}
+
+.input-text-container input{
+  display: block;
+  margin-bottom: 10px;
+}
+
+.input-text {
+  color: gold;
+  background: none;
+  outline: gold 1px solid;
+  padding: 5px;
+  border: none;
 }

@@ -5,19 +5,22 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
         <link href="styles/styles.css" rel="stylesheet"/>
-        <style>
-            .title-future-updates {
-                font-size: 25px;
-            }
-        </style>
     </head>
     <body id="body">
         <main>
             <div>
                 <div class="top-container">
-                    <button id="quick-start" class="quick-start">'Enter' to Quick Start</button>
                     <div>
-                        Visit: &nbsp; 
+                        <b style="font-weight: bold;">CHOOSE YOUR FACTIONS: </b>
+                        <button id="login-user" class="login-button" data-toggle="tooltip" data-placement="bottom" title="User Login"> 
+                            <img height="25px" src="assets/spartan.png" alt="">
+                        </button>
+                        <button id="login-google" class="login-button" data-toggle="tooltip" data-placement="bottom" title="Google Login"> 
+                            <img height="25px" src="assets/google.png" alt="">
+                        </button>
+                    </div>
+                    <div>
+                        <b style="font-weight: bold;">VISIT: </b>
                         <a href="https://youtu.be/DSG53BsUYd0?si=8MytIg2jxCvFhk_l" target="_blank">
                             <img src="./assets/github.png" alt="Github" height="25px">
                         </a>
@@ -37,17 +40,18 @@
                     <div class="other-div">
                         <button id="custom-level" class="level-button custom-level">Custom</button>
                     </div>
-                  </div>
+                </div>
+                <br>
+                <button id="quick-start" class="quick-start">'Enter' to Quick Start</button>
+                <br>
                 <br>
                 <p class="title-future-updates">Future updates:</p>
                 <ol>
-                    <li style="text-decoration: line-through;">Offline use</li>
-                    <li style="text-decoration: line-through;">Select difficulty </li>
-                    <li>Select type of words</li>
                     <li>Login by Google Account to compete all over the world</li>
                     <li>Store statistic online</li>
                     <li>Ranking system</li>
                     <li>Choose language (maybe)</li>
+                    <li>Party competition / PVP</li>
                 </ol>
             </div>
         </main>

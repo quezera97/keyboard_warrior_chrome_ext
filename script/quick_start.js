@@ -58,6 +58,15 @@ $( document ).ready(function() {
                 case 'legend':
                     displayLegendQuote(quote);
                     break;
+
+                case 'custom':
+
+                    const numbersValue = urlParams.get('numbers');
+                    const specialCharValue = urlParams.get('specialChar');
+                    const autoCapitalizeValue = urlParams.get('autoCapitalize');
+
+                    displayCustomQuote(quote, numbersValue, specialCharValue, autoCapitalizeValue);
+                    break;
             
                 default:
                     displayQuote(quote);
@@ -229,7 +238,7 @@ $( document ).ready(function() {
                 $("#quoteDisplay").append(numberSpan);
             }
 
-            if(capital == true){
+            if(capital == 'true'){
                 const randomCaseCharacter = Math.random() < 0.5 ? character.toUpperCase() : character;
                 const characterSpan = $("<span>")
                     .text(randomCaseCharacter)

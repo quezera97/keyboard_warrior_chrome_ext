@@ -41,4 +41,8 @@ $( document ).ready(function() {
     $('#custom-level').click(function () {
         window.location.href = '../pages/custom_words.html'
     });
+
+    $('#login-user').click(function () {
+        window.location.href = '../pages/login_register.html'
+    });
 });
