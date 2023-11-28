@@ -51,14 +51,15 @@ main {
   border-top: solid 1px;
 }
 
-.login-button {
+.icon-button {
   color: gold;
   background: none;
   border: none;
   outline: none;
+  cursor:pointer;
 }
 
-.kids-level, .amateur-level, .pro-level, .legend-level, .custom-level, .generate-custom {
+.kids-level, .amateur-level, .pro-level, .legend-level, .custom-level, .practice-level, .generate-custom {
   color: gold;
   background: none;
   outline: gold 1px solid;
@@ -128,7 +129,7 @@ main {
 }
 
 /* normal button*/
-.quick-start, .try-again-result, .escape-result {
+.try-again-result, .escape-result {
   color: gold;
   border: none;
   background: none;

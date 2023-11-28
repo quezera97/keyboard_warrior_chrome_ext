@@ -4,26 +4,32 @@
         <title>Keyboard Warrior - Sparta</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <link href="styles/styles.css" rel="stylesheet"/>        
+    
+        <link href="styles/styles.css" rel="stylesheet"/>
     </head>
+    
     <body id="body">
         <main>
             <div>
                 <div class="top-container">
-                    <div id="faction-selection-container">
-                        <b style="font-weight: bold;">CHOOSE YOUR FACTIONS: </b>
-                        <button id="login-user" class="login-button" data-toggle="tooltip" data-placement="bottom" title="User Login"> 
-                            <img height="25px" src="assets/spartan.png" alt="">
-                        </button>
-                        <button id="login-google" class="login-button" data-toggle="tooltip" data-placement="bottom" title="Google Login"> 
-                            <img height="25px" src="assets/google.png" alt="">
-                        </button>
+                    <div id="user-faction-container" hidden>
+                        <div id="faction-selection-container">
+                            <b style="font-weight: bold;">CHOOSE YOUR FACTIONS: </b>
+                            <button id="login-user" class="icon-button" data-toggle="tooltip" data-placement="bottom" title="User Login"> 
+                                <img height="25px" src="assets/spartan.png" alt="">
+                            </button>
+                            <button id="login-google" class="icon-button" data-toggle="tooltip" data-placement="bottom" title="Google Login"> 
+                                <img height="25px" src="assets/google.png" alt="">
+                            </button>
+                        </div>
+                        <div id="user-profile-container">
+                            <button id="user-profile" class="icon-button" data-toggle="tooltip" data-placement="bottom" title="Profile"> 
+                                <img height="25px" src="assets/spartan.png" alt="">
+                            </button>
+                            <span class="normal-text">Welcome, Spartan</span>
+                        </div>
                     </div>
-                    <div id="user-profile-container">
-                        <button id="user-profile" class="login-button" data-toggle="tooltip" data-placement="bottom" title="User Login"> 
-                            <img height="25px" src="assets/spartan.png" alt="">
-                        </button>
-                    </div>
+                    <div id="dummy-container"></div>
                     <div>
                         <b style="font-weight: bold;">VISIT: </b>
                         <a href="https://youtu.be/DSG53BsUYd0?si=8MytIg2jxCvFhk_l" target="_blank">
@@ -34,7 +40,10 @@
                         </a>
                     </div>
                 </div>
-                <p class="normal-text">Sparta! Choose your opponents</p>
+                <div class="level-bar">
+                    <p class="normal-text">Sparta! Choose your opponents</p>
+                    <p class="normal-text" style="margin-right: 15px;">The Unrecorded</p>
+                </div>
                 <div class="level-bar">
                     <div class="level-div">
                         <button id="kids-level" class="level-button kids-level">Helots</button>
@@ -43,12 +52,17 @@
                         <button id="legend-level" class="level-button legend-level">Gods</button>
                     </div>
                     <div class="other-div">
+                        <button id="practice-level" class="level-button practice-level">Practice</button>
                         <button id="custom-level" class="level-button custom-level">Custom</button>
                     </div>
                 </div>
                 <br>
-                <button id="quick-start" class="quick-start">'Enter' to Quick Start</button>
-                <br>
+                <button id="pvp" class="icon-button" data-toggle="tooltip" data-placement="bottom" title="PVP"> 
+                    <img height="30px" src="assets/colosseum.png" alt="">
+                </button>
+                <button id="hall-of-fame" class="icon-button" data-toggle="tooltip" data-placement="bottom" title="Hall Of Fame"> 
+                    <img height="30px" src="assets/crown.png" alt="">
+                </button>
                 <table class="normal-table">
                     <tr>
                         <td>Scoreboard</td>

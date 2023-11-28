@@ -1,5 +1,6 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js'
-import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js';
+import { initializeApp } from './firebase/firebase-app.js'
+import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
+import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.js'
 
 $( document ).ready(function() {
     const queryString = window.location.search;
@@ -23,9 +24,7 @@ $( document ).ready(function() {
 
     localStorage.setItem(levelValue, JSON.stringify(results));
 
-    $('#escape-or-try-again').focus();
-
-    $('#escape-or-try-again').keydown(function (e) {
+    $('#result-body').keydown(function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
 
@@ -50,13 +49,18 @@ $( document ).ready(function() {
     };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
-
-    const uid = localStorage.getItem('uid');
-
-    if(uid){
-        setUserLevelData(uid, levelValue)
-    }
+    
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const uid = user.uid;
+            
+            if(uid){
+                setUserLevelData(uid, levelValue)
+            }
+        }
+    });
 
     function setUserLevelData(uid, level) {
         const userRecordsRef = ref(database, uid+'/records/levels/'+level);

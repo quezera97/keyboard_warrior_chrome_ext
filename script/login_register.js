@@ -1,9 +1,16 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js'
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js'
-import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js'
+// import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js'
+// import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js'
+// import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js';
+// import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js'
+
+import { initializeApp } from './firebase/firebase-app.js';
+import { getAnalytics } from './firebase/firebase.analytics.js';
+import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from './firebase/firebase-auth.js';
 
 $( document ).ready(function() {
+    var snackbar = $("#snackbar");
+
     var audioBackground = new Audio('/assets/intro.mp3');
     audioBackground.play();
 
@@ -32,7 +39,7 @@ $( document ).ready(function() {
     };
     
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
+    const auth = getAuth(app);
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
     // const database = getDatabase(app);
 
@@ -45,14 +52,10 @@ $( document ).ready(function() {
                 const user = userCredential.user;
                 const uid = user.uid;
 
-                const storedUid = localStorage.getItem("uid");
-
-                checkStoredUid(storedUid, uid);
-
                 checkUserExists(uid, 'register')
                 .then((userExists) => {
                     if (userExists) {
-                        console.log('User already exists.');
+                        showSnackBar('User already exist');
                     } else {
                         setUserLevelData(uid, 'kids');
                         setUserLevelData(uid, 'amateur');
@@ -68,9 +71,9 @@ $( document ).ready(function() {
                 console.log(errorMessage);
 
                 if (errorMessage.includes('email-already-in-use')) {
-                    console.log('Email is already in use.');
+                    showSnackBar('Email is already in use');
                 } else {
-                    console.log('An error occurred:', errorMessage);
+                    showSnackBar('An unexpected error occurred: ' + errorMessage);
                 }
             });
     });
@@ -79,7 +82,7 @@ $( document ).ready(function() {
         var email = $('#email_login').val();
         var password = $('#password_login').val();
 
-        signIn(auth, email, password);
+        signIn(auth, email, password);        
     });
 
     function signIn(auth, email, password) {
@@ -110,7 +113,7 @@ $( document ).ready(function() {
                         window.location.href = '../dashboard.html';
 
                     } else {
-                        console.log('User not found. Please register.');
+                        showSnackBar('User not found. Please register');
                     }
                 });
             })
@@ -122,11 +125,13 @@ $( document ).ready(function() {
                 if (errorCode === 'auth/user-not-found') {
                     console.log('User not found. Please register.');
                 } else if (errorCode === 'auth/wrong-password') {
-                    console.log('Incorrect password. Please try again.');
+                    showSnackBar('Incorrect password. Please try again');
                 } else {
-                    console.log('An unexpected error occurred:', errorMessage);
+                    showSnackBar('An unexpected error occurred: ' + errorMessage);
                 }
             });
+
+        showSnackBar('Logged in');
     }
 
     function checkStoredUid(storedUid, firebaseUid) {
@@ -152,20 +157,26 @@ $( document ).ready(function() {
                 return typeOfCheck == 'register' ? !!userData : userData;
             })
             .catch((error) => {
-                console.error('Error checking user existence:', error.message);
+                showSnackBar('Error checking user existence: '+ error.message);
                 return false;
             });
     }
 
     function setUserLevelData(uid, level) {
         const userRecordsRef = ref(database, uid+'/records/levels/'+level);
-        set(userRecordsRef, defaultUserData)
-            .then(() => {
-                console.log(`Child record created for the "${level}" level.`);
-            })
+        set(userRecordsRef, defaultUserData)            
             .catch((error) => {
-                console.error(`Error creating child record for the "${level}" level:`, error.message);
+                showSnackBar('Unexpected error occured: '+ error.message);
             });
+    }
+
+    function showSnackBar(message) {
+        $('#snackbar-text').text(message);
+
+        snackbar.addClass("show");
+        setTimeout(function(){
+            snackbar.removeClass("show");
+        }, 3000);
     }
 });
 // admin@gmail.com

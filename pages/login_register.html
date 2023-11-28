@@ -4,22 +4,17 @@
         <title>Keyboard Warrior - Sparta</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
+
         <link rel="stylesheet" href="/styles/styles.css"/>
         <link rel="stylesheet" href="/styles/login_register.css">
+        <link rel="stylesheet" href="/styles/snackbar.css">
     </head>
     <body id="body_login_register">
         <main>
             <div>
+                <div id="snackbar"><span id="snackbar-text"></span></div>
                 <div class="top-container">
-                    <div>
-                        <b style="font-weight: bold;">CHOOSE YOUR FACTIONS: </b>
-                        <button id="login-user" class="login-button" data-toggle="tooltip" data-placement="bottom" title="User Login"> 
-                            <img height="25px" src="/assets/spartan.png" alt="">
-                        </button>
-                        <button id="login-google" class="login-button" data-toggle="tooltip" data-placement="bottom" title="Google Login"> 
-                            <img height="25px" src="/assets/google.png" alt="">
-                        </button>
-                    </div>
+                    <div></div>
                     <div>
                         <b style="font-weight: bold;">VISIT: </b>
                         <a href="https://youtu.be/DSG53BsUYd0?si=8MytIg2jxCvFhk_l" target="_blank">
@@ -43,10 +38,6 @@
                                 <div class="group">
                                     <label for="password_login" class="label">Password</label>
                                     <input id="password_login" type="password" class="input" data-type="password">
-                                </div>
-                                <div class="group">
-                                    <input id="check" type="checkbox" class="check" checked>
-                                    <label for="check"><span class="icon"></span> Keep me Signed in</label>
                                 </div>
                                 <div class="group">
                                     <button id="submit_login" class="button">Submit</button>
