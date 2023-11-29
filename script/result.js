@@ -82,7 +82,7 @@ $( document ).ready(function() {
 
         get(hallOfFame).then((snapshot) => {
             if ((snapshot.val())) {
-                compareHallOfFame(hallOfFame);
+                compareHallOfFame(hallOfFame, hallOfFameResults);
             } else {
                 push(hallOfFame, hallOfFameResults)
                     .catch((error) => {
@@ -98,61 +98,94 @@ $( document ).ready(function() {
             });
     }
 
-    function compareHallOfFame(hallOfFameRef) {
+    function compareHallOfFame(hallOfFameRef, hallOfFameResults, limit = 15) {
         get(hallOfFameRef)
-        .then((snapshot) => {
-            const currentKidsEntries = snapshot.val();
-
-            let lowestEntry = null;
-            let lowestAccuracy = Infinity;
-            let lowestWPM = Infinity;
-            let limitHallOfFame = 15;
-
-            if(currentKidsEntries && Object.keys(currentKidsEntries).length == limitHallOfFame){
-                Object.keys(currentKidsEntries).forEach((key) => {
-
-                    const entry = currentKidsEntries[key];
-                    const accuracy = parseFloat(entry.accuracy);
-                    const wpm = parseFloat(entry.wpm);
-                    const username = entry.username;
-                                        
-                    //if same accuracy and wpm update the usename
-                    if (hallOfFameResults.accuracy == accuracy && hallOfFameResults.wpm == wpm) {
-                        if(!username.includes(hallOfFameResults.username[0]))   {
-                            username.push(hallOfFameResults.username[0]);
-                            
-                            set(ref(database, `hall_of_fame/kids/${key}/username`), username)
-                                .catch((error) => {
+            .then((snapshot) => {
+                const currentKidsEntries = snapshot.val();
+                const entriesArray = Object.keys(currentKidsEntries).map(key => ({
+                    key,
+                    ...currentKidsEntries[key]
+                }));
+    
+                const newAccuracy = parseFloat(hallOfFameResults.accuracy);
+                const newWPM = parseFloat(hallOfFameResults.wpm);
+    
+                const matchingEntry = entriesArray.find(entry =>
+                    parseFloat(entry.accuracy) === newAccuracy && parseFloat(entry.wpm) === newWPM
+                );
+    
+                if (matchingEntry) {
+                    // Update the username if accuracy and wpm match
+                    if (!matchingEntry.username.includes(hallOfFameResults.username[0])) {
+                        matchingEntry.username.push(hallOfFameResults.username[0]);
+                        set(ref(database, `hall_of_fame/kids/${matchingEntry.key}/username`), matchingEntry.username)
+                            .catch((error) => {
                                 console.error('Error updating username in hall of fame record:', error);
                             });
-                        }
                     }
-
-                    //update the new accuracy ad wpm if someone beat
-                    if (accuracy < lowestAccuracy || (accuracy == lowestAccuracy && wpm < lowestWPM)) {
-                        lowestEntry = key;
-                        lowestAccuracy = accuracy;
-                        lowestWPM = wpm;
-
-                        if (hallOfFameResults.accuracy >= lowestAccuracy && hallOfFameResults.wpm > lowestWPM) {
-                            set(ref(database, `hall_of_fame/kids/${lowestEntry}`), hallOfFameResults)
+                } else {
+                    entriesArray.sort((a, b) => {
+                        if (parseFloat(a.accuracy) !== parseFloat(b.accuracy)) {
+                            return parseFloat(b.accuracy) - parseFloat(a.accuracy);
+                        } else {
+                            return parseFloat(b.wpm) - parseFloat(a.wpm);
+                        }
+                    });
+    
+                    if (entriesArray.length < limit) {
+                        // Add new entry if not reaching the limit
+                        push(hallOfFameRef, hallOfFameResults)
                             .catch((error) => {
-                                console.error('Error updating hall of fame record:', error);
+                                console.error('Error adding new entry to hall of fame:', error);
                             });
-                        }
+                    } else {
+                        const lowestEntry = entriesArray[entriesArray.length - 1];
+                        const lowestAccuracy = parseFloat(lowestEntry.accuracy);
+                        const lowestWPM = parseFloat(lowestEntry.wpm);
+    
+                        // Update the lowest entry with new details
+                        if ((hallOfFameResults.accuracy >= lowestAccuracy && hallOfFameResults.wpm >= lowestWPM) || (hallOfFameResults.accuracy == lowestAccuracy && hallOfFameResults.wpm >= lowestWPM)) {
+                        set(ref(database, `hall_of_fame/kids/${lowestEntry.key}`), hallOfFameResults)
+                            .catch((error) => {
+                                console.error('Error updating lowest entry in hall of fame record:', error);
+                            });
                     }
-                });
-            }
-            else {
-                //add new if not meet the limit
-                push(hallOfFameRef, hallOfFameResults)
-                    .catch((error) => {
-                    console.error('Error creating hall of fame record:', error);
-                });
-            }
-        })         
-        .catch((error) => {
-            console.error('Error fetching hall of fame data:', error);
-        });
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching hall of fame data:', error);
+            });
     }
+    
+    
 });
+            // let lowestEntry = null;
+            // let lowestAccuracy = Infinity;
+            // let lowestWPM = Infinity;
+            // let limitHallOfFame = 3;
+            // let pushPerformed = false;
+    // //update the new accuracy ad wpm if someone beat
+    // if (accuracy < lowestAccuracy || (accuracy == lowestAccuracy && wpm < lowestWPM)) {
+    //     lowestEntry = key;
+    //     lowestAccuracy = accuracy;
+    //     lowestWPM = wpm;
+    // }
+    // else {
+    //     //add new if not meet the limit
+    //     if(!pushPerformed && Object.keys(currentKidsEntries).length <= limitHallOfFame){
+    //         push(hallOfFameRef, hallOfFameResults)
+    //             .catch((error) => {
+    //             console.error('Error creating hall of fame record:', error);
+    //         });
+    
+    //         pushPerformed = true;
+    //     }
+    // }
+    
+    // if (hallOfFameResults.accuracy >= lowestAccuracy && hallOfFameResults.wpm >= lowestWPM) {
+    //     set(ref(database, `hall_of_fame/kids/${lowestEntry}`), hallOfFameResults)
+    //     .catch((error) => {
+    //             console.error('Error updating hall of fame record:', error);
+    //         });
+    // }
