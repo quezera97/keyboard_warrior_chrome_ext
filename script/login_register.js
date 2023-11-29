@@ -41,11 +41,12 @@ $( document ).ready(function() {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
-    // const database = getDatabase(app);
+    var username = '';
 
     $('#submit_register').click(function () {
         var email = $('#email_register').val();
         var password = $('#password_register').val();
+        username = $('#username_register').val() ?? 'Guest';
 
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -163,6 +164,9 @@ $( document ).ready(function() {
     }
 
     function setUserLevelData(uid, level) {
+        const usernameRef = ref(database, uid+'/username');
+        set(usernameRef, username);
+            
         const userRecordsRef = ref(database, uid+'/records/levels/'+level);
         set(userRecordsRef, defaultUserData)            
             .catch((error) => {
@@ -179,4 +183,3 @@ $( document ).ready(function() {
         }, 3000);
     }
 });
-// admin@gmail.com

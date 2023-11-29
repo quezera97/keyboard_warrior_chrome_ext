@@ -116,6 +116,16 @@ $( document ).ready(function() {
 
 
     function setUserResults(uid, level) {
+        const usernameRef = ref(database, uid+'/username');
+        get(usernameRef)
+            .then((snapshot) => {
+                const username = snapshot.val();
+
+                $('#username').text(username != '' ? username : 'Spartan');
+
+                localStorage.setItem('username', username ?? 'Guest');
+        });
+
         const userRecordsRef = ref(database, uid+'/records/levels/'+level);
         
         get(userRecordsRef)
