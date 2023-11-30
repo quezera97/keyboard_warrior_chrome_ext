@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="/styles/styles.css"/>
         <link rel="stylesheet" href="/styles/login_register.css">
         <link rel="stylesheet" href="/styles/snackbar.css">
+        <link rel="stylesheet" href="/styles/modal.css">
     </head>
     <body id="body_login_register">
         <main>
@@ -25,6 +26,23 @@
                         </a>
                     </div>
                 </div>
+                <div id="captcha-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+
+                        <p class="normal-text" style="font-size: 25px;" id="captcha-code"></p>
+                        <input style="margin-top: 10px;" type="text" id="user-input" class="captcha-input" placeholder="Enter Captcha">
+                        <button id="verify-captcha" class="captcha-verify">Verify</button>
+                        <p class="message" id="message"></p>
+
+                        <p class="normal-text" style="font-size: 25px; margin-top: 10px;" id="captcha-code-2"></p>
+                        <input style="margin-top: 10px;" type="text" id="user-input-2" class="captcha-input" placeholder="Enter Captcha">
+                        <button id="verify-captcha-2" class="captcha-verify">Verify</button>
+                        <p class="message" id="message-2"></p>
+                    </div>
+                </div>
+
+
                 <div class="login-wrap">
                     <div class="login-html">
                         <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>

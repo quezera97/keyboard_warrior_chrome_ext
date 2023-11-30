@@ -1,4 +1,24 @@
 $( document ).ready(function() {
+
+    var audioBackground = new Audio('/assets/intro.mp3');
+    plaBackgroundAudio();
+
+    function plaBackgroundAudio() {
+
+        if (localStorage.getItem('audioPosition')) {
+          audioBackground.currentTime = parseFloat(localStorage.getItem('audioPosition'));
+        }
+
+        audioBackground.loop = true;
+        audioBackground.play();        
+    }
+
+    function stopAndSetAudioPos() {
+        audioBackground.onpause = audioBackground.onended = null;
+        audioBackground.pause();
+        localStorage.setItem('audioPosition', audioBackground.currentTime);
+    }
+
     var customNumbers = false;
     var customSpecialChars = false;
     var customAutoCapitalize = false;
@@ -8,6 +28,8 @@ $( document ).ready(function() {
     $('#body_custom_words').keydown(function (e) {
         if (e.key === 'Escape') {
             e.preventDefault();
+
+            stopAndSetAudioPos();
 
             window.location.href = '../dashboard.html';
         }
@@ -75,6 +97,8 @@ $( document ).ready(function() {
     });
 
     $('#generate-custom').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/quick_start.html' + 
             '?level=custom' +
             '&numbers=' + encodeURIComponent(customNumbers) +

@@ -2,6 +2,24 @@ import { initializeApp } from './firebase/firebase-app.js';
 import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
 
 $( document ).ready(async function() {
+    var audioBackground = new Audio('/assets/intro.mp3');
+    plaBackgroundAudio();
+
+    function plaBackgroundAudio() {
+
+        if (localStorage.getItem('audioPosition')) {
+          audioBackground.currentTime = parseFloat(localStorage.getItem('audioPosition'));
+        }
+
+        audioBackground.loop = true;
+        audioBackground.play();        
+    }
+
+    function stopAndSetAudioPos() {
+        audioBackground.onpause = audioBackground.onended = null;
+        audioBackground.pause();
+        localStorage.setItem('audioPosition', audioBackground.currentTime);
+    }
 
     let initialLevel = 'kids';   
 
@@ -17,6 +35,8 @@ $( document ).ready(async function() {
     $('#body_hall_of_fame').keydown(function (e) {
         if (e.key === 'Escape') {
             e.preventDefault();
+
+            stopAndSetAudioPos();
             
             window.location.href = '../dashboard.html';
         }

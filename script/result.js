@@ -3,6 +3,25 @@ import { getDatabase, ref, set, get, push} from './firebase/firebase-database.js
 import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.js'
 
 $( document ).ready(function() {
+    var audioBackground = new Audio('/assets/intro.mp3');
+    plaBackgroundAudio();
+
+    function plaBackgroundAudio() {
+
+        if (localStorage.getItem('audioPosition')) {
+          audioBackground.currentTime = parseFloat(localStorage.getItem('audioPosition'));
+        }
+
+        audioBackground.loop = true;
+        audioBackground.play();        
+    }
+
+    function stopAndSetAudioPos() {
+        audioBackground.onpause = audioBackground.onended = null;
+        audioBackground.pause();
+        localStorage.setItem('audioPosition', audioBackground.currentTime);
+    }
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const levelValue = urlParams.get('level');
@@ -28,11 +47,15 @@ $( document ).ready(function() {
         if (e.key === 'Enter') {
             e.preventDefault();
 
+            stopAndSetAudioPos();
+
             window.location.href = '../pages/quick_start.html' +
             '?level=' + levelValue;
         }
         else if (e.key === 'Escape') {
             e.preventDefault();
+
+            stopAndSetAudioPos();
 
             window.location.href = '../dashboard.html';
         }

@@ -6,61 +6,99 @@ $( document ).ready(function() {
     $('#dummy-container').show();
 
     var audioSparta = new Audio('/assets/intro_sparta.mp3');
-    var audioBackground = new Audio('/assets/intro.mp3');
-    
-    audioSparta.volume = 0.7;
+    audioSparta.volume = 0.4;
     audioSparta.play();
-    audioBackground.play();
+
+    var audioBackground = new Audio('/assets/intro.mp3');
+    plaBackgroundAudio();
+
+    function plaBackgroundAudio() {
+
+        if (localStorage.getItem('audioPosition')) {
+          audioBackground.currentTime = parseFloat(localStorage.getItem('audioPosition'));
+        }
+
+        audioBackground.loop = true; 
+        audioBackground.play();        
+    }
+
+    function stopAndSetAudioPos() {
+        audioBackground.onpause = audioBackground.onended = null;
+        audioBackground.pause();
+        localStorage.setItem('audioPosition', audioBackground.currentTime);
+    }
 
     $('#body').keydown(function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
+
+            stopAndSetAudioPos();
             
             window.location.href = 'pages/quick_start.html';
         }
     });
 
     $('#practice-level').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = 'pages/quick_start.html';
     });
 
     $('#kids-level').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/quick_start.html' + 
             '?level=kids';
     });
 
     $('#amateur-level').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/quick_start.html' + 
             '?level=amateur';
     });
 
     $('#pro-level').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/quick_start.html' + 
             '?level=pro';
     });
 
     $('#legend-level').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/quick_start.html' + 
             '?level=legend';
     });
 
     $('#custom-level').click(function () {
+       stopAndSetAudioPos();
+
         window.location.href = '../pages/custom_words.html'
     });
 
     $('#login-user').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/login_register.html'
     });
 
     $('#user-profile').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/user_profile.html'
     });
 
     $('#pvp').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/pvp.html'
     });
 
     $('#hall-of-fame').click(function () {
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/hall_of_fame.html'
     });
 

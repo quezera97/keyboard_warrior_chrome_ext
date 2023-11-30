@@ -3,11 +3,29 @@ import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.
 
 $( document ).ready(function() {
     var audioBackground = new Audio('/assets/intro.mp3');
-    audioBackground.play();
+    plaBackgroundAudio();
+
+    function plaBackgroundAudio() {
+
+        if (localStorage.getItem('audioPosition')) {
+          audioBackground.currentTime = parseFloat(localStorage.getItem('audioPosition'));
+        }
+
+        audioBackground.loop = true;
+        audioBackground.play();        
+    }
+
+    function stopAndSetAudioPos() {
+        audioBackground.onpause = audioBackground.onended = null;
+        audioBackground.pause();
+        localStorage.setItem('audioPosition', audioBackground.currentTime);
+    }
 
     $('#body_user_profile').keydown(function (e) {
         if (e.key === 'Escape') {
             e.preventDefault();
+
+            stopAndSetAudioPos();
 
             window.location.href = '../dashboard.html';
         }
@@ -30,15 +48,14 @@ $( document ).ready(function() {
         signOut(auth);
 
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-              const uid = user.uid;
-              console.log(uid);
-            } else {
+            if (!user) {
                 localStorage.removeItem("uid");
                 localStorage.removeItem("kids");
                 localStorage.removeItem("amateur");
                 localStorage.removeItem("legend");
                 localStorage.removeItem("pro");
+
+                stopAndSetAudioPos();
 
                 window.location.href = '../dashboard.html';
             }

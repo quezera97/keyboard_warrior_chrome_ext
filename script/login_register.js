@@ -9,14 +9,32 @@ import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from './firebase/firebase-auth.js';
 
 $( document ).ready(function() {
-    var snackbar = $("#snackbar");
-
     var audioBackground = new Audio('/assets/intro.mp3');
-    audioBackground.play();
+    plaBackgroundAudio();
+
+    function plaBackgroundAudio() {
+
+        if (localStorage.getItem('audioPosition')) {
+          audioBackground.currentTime = parseFloat(localStorage.getItem('audioPosition'));
+        }
+
+        audioBackground.loop = true;
+        audioBackground.play();        
+    }
+
+    function stopAndSetAudioPos() {
+        audioBackground.onpause = audioBackground.onended = null;
+        audioBackground.pause();
+        localStorage.setItem('audioPosition', audioBackground.currentTime);
+    }
+
+    var snackbar = $("#snackbar");
 
     $('#body_login_register').keydown(function (e) {
         if (e.key === 'Escape') {
             e.preventDefault();
+
+            stopAndSetAudioPos();
 
             window.location.href = '../dashboard.html';
         }
@@ -43,48 +61,105 @@ $( document ).ready(function() {
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
     var username = '';
 
+    var modal = $("#captcha-modal");
+    var span = $(".close").eq(0);
+
+    span.on("click", function() {
+        modal.css("display", "none");
+    });
+    
+    $(window).on("click", function(event) {
+        if ($(event.target).is(modal)) {
+            modal.css("display", "none");
+        }
+    });
+
+    var emailRegister = null;
+    var passwordRegister = null;
+
     $('#submit_register').click(function () {
         var email = $('#email_register').val();
         var password = $('#password_register').val();
+        var repeatPassword = $('#repeat_password_register').val();
         username = $('#username_register').val() ?? 'Guest';
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                const uid = user.uid;
+        emailRegister = email;
+        passwordRegister = password;
 
-                checkUserExists(uid, 'register')
-                .then((userExists) => {
-                    if (userExists) {
-                        showSnackBar('User already exist');
-                    } else {
-                        setUserLevelData(uid, 'kids');
-                        setUserLevelData(uid, 'amateur');
-                        setUserLevelData(uid, 'pro');
-                        setUserLevelData(uid, 'legend');
+        if (!isValidEmail(email)) {
+            showSnackBar('Email address format is incorrect');
+        } else {
+            if(email == ''){
+                showSnackBar('Please key-in your email address');
+            }
+            else if(password == ''){
+                showSnackBar('Please key-in your password');
+            }
+            else{
+                if(password !== repeatPassword){
+                    showSnackBar('Password must be same');
+                }
+                else{
+                    modal.css("display", "block");
+                }
+            }
+        }
+    });
 
-                        signIn(auth, email, password);
-                    }
-                });
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                console.log(errorMessage);
+    function registerIntoFirebase() {
+        createUserWithEmailAndPassword(auth, emailRegister, passwordRegister)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            const uid = user.uid;
 
-                if (errorMessage.includes('email-already-in-use')) {
-                    showSnackBar('Email is already in use');
+            checkUserExists(uid, 'register')
+            .then((userExists) => {
+                if (userExists) {
+                    showSnackBar('User already exist');
                 } else {
-                    showSnackBar('An unexpected error occurred: ' + errorMessage);
+                    setUserLevelData(uid, 'kids');
+                    setUserLevelData(uid, 'amateur');
+                    setUserLevelData(uid, 'pro');
+                    setUserLevelData(uid, 'legend');
+
+                    signIn(auth, emailRegister, passwordRegister);
                 }
             });
-    });
+        })
+        .catch((error) => {
+            const errorMessage = error.message;
+
+            if (errorMessage.includes('email-already-in-use')) {
+                showSnackBar('Email is already in use');
+            } else {
+                showSnackBar('Invalid credentials');
+            }
+        });
+    }
 
     $('#submit_login').click(function () {
         var email = $('#email_login').val();
         var password = $('#password_login').val();
 
-        signIn(auth, email, password);        
+        if (!isValidEmail(email)) {
+            showSnackBar('Email address format is incorrect');
+        } else {
+            if(email == ''){
+                showSnackBar('Please key-in your email address');
+            }
+            else if(password == ''){
+                showSnackBar('Please key-in your password');
+            }
+            else{
+                signIn(auth, email, password);
+            }
+        }
     });
+
+    function isValidEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    }
 
     function signIn(auth, email, password) {
         signInWithEmailAndPassword(auth, email, password)
@@ -110,29 +185,21 @@ $( document ).ready(function() {
                         localStorage.setItem("amateur", JSON.stringify(detailAmateur));
                         localStorage.setItem("legend", JSON.stringify(detailLegend));
                         localStorage.setItem("pro", JSON.stringify(detailPro));
+
+                        stopAndSetAudioPos();
                         
                         window.location.href = '../dashboard.html';
+
+                        showSnackBar('Logged in');
 
                     } else {
                         showSnackBar('User not found. Please register');
                     }
                 });
             })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.error('Login error:', errorMessage);
-    
-                if (errorCode === 'auth/user-not-found') {
-                    console.log('User not found. Please register.');
-                } else if (errorCode === 'auth/wrong-password') {
-                    showSnackBar('Incorrect password. Please try again');
-                } else {
-                    showSnackBar('An unexpected error occurred: ' + errorMessage);
-                }
-            });
-
-        showSnackBar('Logged in');
+            .catch((e) => {
+                showSnackBar('Incorrect login credentials');
+            });        
     }
 
     function checkStoredUid(storedUid, firebaseUid) {
@@ -182,4 +249,97 @@ $( document ).ready(function() {
             snackbar.removeClass("show");
         }, 3000);
     }
+    
+    let captcha = generateCaptcha();
+    let captcha2 = generateCaptcha2();
+    let isCaptcha1Verified = false;
+    let isCaptcha2Verified = false;
+
+    function checkCaptchasAndRegister() {
+        if (isCaptcha1Verified && isCaptcha2Verified) {
+            registerIntoFirebase();
+        }
+    }
+
+    function generateCaptcha() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()-_=+[{]}|;:,<.>/?';
+        let captchaCode = '';
+        for (let i = 0; i < 10; i++) {
+            captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        return captchaCode;
+    }
+
+    function generateCaptcha2() {
+        const operators = ['+', '-', '*'];
+        const num1 = Math.floor(Math.random() * 10);
+        const num2 = Math.floor(Math.random() * 10);
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+    
+        let result;
+        let captcha;
+    
+        switch (operator) {
+            case '+':
+                result = num1 + num2;
+                captcha = `${num1} ${operator} ${num2}`;
+                break;
+            case '-':
+                result = num1 - num2;
+                captcha = `${num1} ${operator} ${num2}`;
+                break;
+            case '*':
+                result = num1 * num2;
+                captcha = `${num1} ${operator} ${num2}`;
+                break;
+            default:
+                break;
+        }
+    
+        return {
+            captcha: captcha,
+            result: result.toString()
+        };
+    }
+    
+    $('#captcha-code').text(captcha);
+    $('#captcha-code-2').text(captcha2.captcha);
+
+    $('#verify-captcha').click(function() {
+        
+        const userInput = $('#user-input').val().trim();
+
+        if (userInput === captcha) {
+            $('#message').text('Captcha verification successful!').css('color', 'green');
+
+            isCaptcha1Verified = true;
+            checkCaptchasAndRegister();
+        } else {
+            $('#message').text('Incorrect Captcha! Please try again.').css('color', 'red');
+
+            isCaptcha1Verified = false;
+            captcha = generateCaptcha();
+
+            $('#captcha-code').text(captcha);
+        }
+    });
+
+    $('#verify-captcha-2').click(function() {
+        const userInput = $('#user-input-2').val();
+
+        if (userInput === captcha2.captcha) {
+            $('#message-2').text('Captcha verification successful!').css('color', 'green');
+
+            isCaptcha2Verified = true;
+            checkCaptchasAndRegister();
+        } else {
+            $('#message-2').text('Incorrect Captcha! Please try again.').css('color', 'red');
+
+            isCaptcha2Verified = false;
+            captcha2 = generateCaptcha2();
+
+            $('#captcha-code-2').text(captcha2.captcha);
+        }
+    });
 });

@@ -1,4 +1,24 @@
 $( document ).ready(function() {
+    var audioBackground = new Audio('/assets/intro.mp3');
+    plaBackgroundAudio();
+
+    function plaBackgroundAudio() {
+
+        if (localStorage.getItem('audioPosition')) {
+          audioBackground.currentTime = parseFloat(localStorage.getItem('audioPosition'));
+        }
+
+        audioBackground.loop = true;
+        audioBackground.volume = 0.5;
+        audioBackground.play();        
+    }
+
+    function stopAndSetAudioPos() {
+        audioBackground.onpause = audioBackground.onended = null;
+        audioBackground.pause();
+        localStorage.setItem('audioPosition', audioBackground.currentTime);
+    }
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const levelValue = urlParams.get('level');
@@ -19,20 +39,19 @@ $( document ).ready(function() {
         fetch('https://api.quotable.io/random')
             .then(response => {
             if (response.ok) {
-                console.log('Device is connected to the internet');
                 getNextQuote();
             } else {
-                console.log('Device might not have an internet connection');
+                showSnackBar('No internet connection');
                 getOfflineQuote();
             }
             })
-            .catch(error => {
-            console.log('Error occurred. Device might not have an internet connection');
-            getOfflineQuote();
+            .catch(e => {
+                showSnackBar('No internet connection')
+                getOfflineQuote();
             });
         } else {
-        console.log('Device is reported as offline by the browser');
-        getOfflineQuote();
+            showSnackBar('No internet connection')
+            getOfflineQuote();
         }
     }
     
@@ -120,37 +139,37 @@ $( document ).ready(function() {
         return fetch("https://api.quotable.io/quotes/random?maxLength=50")
         .then((response) => response.json())
         .then((data) => data[0].content)
-        .catch(error => console.log(error));
+        .catch(error => showSnackBar('Error occured. No internet connection'));
     }
     async function getAmateurQuote() {
         return fetch("https://api.quotable.io/quotes/random?maxLength=150")
         .then((response) => response.json())
         .then((data) => data[0].content)
-        .catch(error => console.log(error));
+        .catch(error => showSnackBar('Error occured. No internet connection'));
     }
     async function getProQuote() {
         return fetch("https://api.quotable.io/quotes/random?minLength=100&maxLength=110")
         .then((response) => response.json())
         .then((data) => data[0].content)
-        .catch(error => console.log(error));
+        .catch(error => showSnackBar('Error occured. No internet connection'));
     }
     async function getLegendQuote() {
         return fetch("https://api.quotable.io/quotes/random?minLength=100&maxLength=110")
         .then((response) => response.json())
         .then((data) => data[0].content)
-        .catch(error => console.log(error));
+        .catch(error => showSnackBar('Error occured. No internet connection'));
     }
     async function getCustomQuote(minLength, maxLength) {
         return fetch("https://api.quotable.io/quotes/random?"+minLength+"&maxLength="+maxLength)
         .then((response) => response.json())
         .then((data) => data[0].content)
-        .catch(error => console.log(error));
+        .catch(error => showSnackBar('Error occured. No internet connection'));
     }
     async function getRandomQuote() {
         return fetch("https://api.quotable.io/random")
         .then((response) => response.json())
         .then((data) => data.content)
-        .catch(error => console.log(error));
+        .catch(error => showSnackBar('Error occured. No internet connection'));
     }
 
     function displayAmateurQuote(quote) {
@@ -407,9 +426,13 @@ $( document ).ready(function() {
             e.preventDefault();
 
             if(levelValue == 'custom'){
+                stopAndSetAudioPos();
+
                 window.location.href = '../pages/custom_words.html';
             }
             else{
+                stopAndSetAudioPos();
+
                 window.location.href = '../dashboard.html';
             }
 
@@ -421,6 +444,9 @@ $( document ).ready(function() {
         var inaccuracy =$("#inaccuracy").text();
         var accuracy =$("#accuracy").text();
         var time = $("#timer").text();
+
+        stopAndSetAudioPos();
+
         window.location.href = '../pages/result.html' + 
             '?level=' + encodeURIComponent(levelValue) + 
             '&wpm=' + encodeURIComponent(wpm) + 
@@ -440,4 +466,13 @@ $( document ).ready(function() {
     $('#quoteInput').on('paste', function(e) {
         e.preventDefault();
     });
+
+    function showSnackBar(message) {
+        $('#snackbar-text').text(message);
+
+        snackbar.addClass("show");
+        setTimeout(function(){
+            snackbar.removeClass("show");
+        }, 3000);
+    }
 });
