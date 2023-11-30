@@ -1,38 +1,55 @@
 .table-wrapper {
     max-height: 400px;
-    overflow: auto;
+    overflow: hidden;
     text-align: left;
+    border: gold 1px solid;
+    margin-top: 10px;
+    color: white;
+    text-align: center;
 }
-  
+
+.table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-wrapper:hover {
+    overflow-y: scroll;
+}
+
+.table-wrapper th,
 .table-wrapper td {
     padding: 10px;
+    border: gold 1px solid;
 }
 
-/* Add a class for scrollable tbody */
-.table-wrapper.scrollable tbody {
-    display: block;
-    overflow-y: auto;
-    max-height: 300px;
+.table-wrapper th:nth-child(2),
+.table-wrapper td:nth-child(2) {
+    width: 40%;
 }
 
+.table-wrapper th:not(:nth-child(2)),
+.table-wrapper td:not(:nth-child(2)) {
+    width: 15%;
+}
+
+.table-wrapper tbody tr:hover {
+    color: gold;
+}
+
+.table-wrapper tbody td:hover {
+    font-size: 25px;
+}
 
 .table-wrapper thead {
-    padding: 10px;
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+    background-color: #676767;
+    color: gold;
     position: sticky;
     top: 0;
-    background-color: none;
     z-index: 1;
-    overflow-y: hidden; /*to hide vertical scrollbar*/
 }
-  
-/* Ensure that the table rows and cells still display normally */
-.table-wrapper tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    border-spacing: 0;
+
+.table-wrapper th:not(:first-child),
+.table-wrapper td:not(:first-child) {
+    border-left: gold 1px solid;
 }
-  

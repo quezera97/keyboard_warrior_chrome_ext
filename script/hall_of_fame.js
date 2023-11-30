@@ -1,9 +1,18 @@
 import { initializeApp } from './firebase/firebase-app.js';
 import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
 
-$( document ).ready(function() {
+$( document ).ready(async function() {
 
-    let initialLevel = 'kids';
+    let initialLevel = 'kids';   
+
+    $('.nav-level a').click(async function () {
+        $('.nav-level a').removeClass('active');
+        $(this).addClass('active');
+
+        var selectedLevel = $(this).attr('value');
+
+        await getHallOfFame(selectedLevel);
+    })
 
     $('#body_hall_of_fame').keydown(function (e) {
         if (e.key === 'Escape') {
@@ -26,75 +35,91 @@ $( document ).ready(function() {
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
 
-    const hallOfFameRef = ref(database, 'hall_of_fame/'+initialLevel);
+    await getHallOfFame(initialLevel);
 
-    get(hallOfFameRef)
-    .then((snapshot) => {
-        const levelEntries = snapshot.val();
-        const entriesArray = Object.values(levelEntries);
+    async function getHallOfFame(level) {
+        const hallOfFameRef = ref(database, 'hall_of_fame/'+level);
+    
+        get(hallOfFameRef)
+        .then((snapshot) => {
 
-        // Sort the entries based on accuracy and then by WPM
-        entriesArray.sort((a, b) => {
-            if (parseFloat(a.accuracy) !== parseFloat(b.accuracy)) {
-                return parseFloat(b.accuracy) - parseFloat(a.accuracy);
+            if ((snapshot.val())) {
+
+                const levelEntries = snapshot.val();
+                const entriesArray = Object.values(levelEntries);
+        
+                // Sort the entries based on accuracy and then by WPM
+                entriesArray.sort((a, b) => {
+                    if (parseFloat(a.accuracy) !== parseFloat(b.accuracy)) {
+                        return parseFloat(b.accuracy) - parseFloat(a.accuracy);
+                    } else {
+                        return parseFloat(b.wpm) - parseFloat(a.wpm);
+                    }
+                });
+        
+                const tableBody = $('#tableBody');
+                tableBody.empty();
+
+                entriesArray.forEach((entry, index) => {
+                    const accuracy = parseFloat(entry.accuracy);
+                    const wpm = parseFloat(entry.wpm);
+                    const time = parseFloat(entry.time);
+                    const username = entry.username;
+        
+                    const newRow = $('<tr></tr>');
+        
+                    const rankingCell = $('<td></td>');
+                    if (index === 0) {
+                        rankingCell.text('1st');
+                    } else if (index === 1) {
+                        rankingCell.text('2nd');
+                    } else if (index === 2) {
+                        rankingCell.text('3rd');
+                    } else {
+                        rankingCell.text(`${index + 1}th`);
+                    }
+                    newRow.append(rankingCell);
+        
+                    const usernameCell = $('<td></td>');
+                    const usernameText = username.join('<br>');
+                    usernameCell.html(usernameText);
+                    newRow.append(usernameCell);
+        
+                    const accuracyCell = $('<td></td>');
+                    accuracyCell.text(accuracy);
+                    newRow.append(accuracyCell);
+        
+                    const wpmCell = $('<td></td>');
+                    wpmCell.text(wpm);
+                    newRow.append(wpmCell);
+        
+                    const timeCell = $('<td></td>');
+                    timeCell.text(time);
+                    newRow.append(timeCell);
+        
+                    tableBody.append(newRow);
+                });
+        
+                // Check if the content height exceeds a threshold and add scroll if necessary
+                const tableWrapper = $('.table-wrapper');
+                const tableBodyHeight = tableWrapper.innerHeight();
+                const tableBodyScrollHeight = tableWrapper[0].scrollHeight;
+        
+                if (tableBodyScrollHeight > tableBodyHeight) {
+                    tableWrapper.addClass('scrollable');
+                }
+
             } else {
-                return parseFloat(b.wpm) - parseFloat(a.wpm);
+                const tableBody = $('#tableBody');
+                tableBody.empty();
+
+                const emptyRow = $('<tr><td style="text-align: center;" colspan="5">No entries found</td></tr>');
+                tableBody.append(emptyRow);
             }
+        })
+        .catch((error) => {
+            console.error('Error fetching hall of fame data:', error);
         });
 
-        const tableBody = $('#tableBody');
-
-        entriesArray.forEach((entry, index) => {
-            const accuracy = parseFloat(entry.accuracy);
-            const wpm = parseFloat(entry.wpm);
-            const time = parseFloat(entry.time);
-            const username = entry.username;
-
-            const newRow = $('<tr></tr>');
-
-            const rankingCell = $('<td></td>');
-            if (index === 0) {
-                rankingCell.text('1st');
-            } else if (index === 1) {
-                rankingCell.text('2nd');
-            } else if (index === 2) {
-                rankingCell.text('3rd');
-            } else {
-                rankingCell.text(`${index + 1}th`);
-            }
-            newRow.append(rankingCell);
-
-            const usernameCell = $('<td></td>');
-            usernameCell.text(username);
-            newRow.append(usernameCell);
-
-            const accuracyCell = $('<td></td>');
-            accuracyCell.text(accuracy);
-            newRow.append(accuracyCell);
-
-            const wpmCell = $('<td></td>');
-            wpmCell.text(wpm);
-            newRow.append(wpmCell);
-
-            const timeCell = $('<td></td>');
-            timeCell.text(time);
-            newRow.append(timeCell);
-
-            tableBody.append(newRow);
-        });
-
-        // Check if the content height exceeds a threshold and add scroll if necessary
-        const tableWrapper = $('.table-wrapper');
-        const tableBodyHeight = tableWrapper.innerHeight();
-        const tableBodyScrollHeight = tableWrapper[0].scrollHeight;
-
-        if (tableBodyScrollHeight > tableBodyHeight) {
-            tableWrapper.addClass('scrollable');
-        }
-    })
-    .catch((error) => {
-        console.error('Error fetching hall of fame data:', error);
-    });
-
-
+    }
 });
