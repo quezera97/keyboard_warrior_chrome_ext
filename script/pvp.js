@@ -27,4 +27,11 @@ $( document ).ready(function() {
             window.location.href = '../dashboard.html';
         }
     });
+
+    $('#escape-button').click(function (e) {
+        stopAndSetAudioPos();
+
+        window.location.href = '../dashboard.html';
+    });
+
 });

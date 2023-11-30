@@ -31,6 +31,13 @@ $( document ).ready(function() {
         }
     });
 
+    $('#escape-button').click(function (e) {
+        stopAndSetAudioPos();
+
+        window.location.href = '../dashboard.html';
+    });
+
+
     $('#logout-user').click(function () {
         const firebaseConfig = {
             apiKey: "AIzaSyBYtSkWCVLBDWkR_UmL_ojguW1C6gZVPFw",

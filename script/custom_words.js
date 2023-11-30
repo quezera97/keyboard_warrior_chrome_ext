@@ -34,6 +34,12 @@ $( document ).ready(function() {
             window.location.href = '../dashboard.html';
         }
     });
+    
+    $('#escape-button').click(function (e) {
+        stopAndSetAudioPos();
+
+        window.location.href = '../dashboard.html';
+    });
 
     var sliderMin = $("#custom-min-length");
     var outputMin = $("#min-length-value");

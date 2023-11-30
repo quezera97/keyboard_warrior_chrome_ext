@@ -42,6 +42,12 @@ $( document ).ready(async function() {
         }
     });
 
+    $('#escape-button').click(function (e) {
+        stopAndSetAudioPos();
+
+        window.location.href = '../dashboard.html';
+    });
+
     const firebaseConfig = {
         apiKey: "AIzaSyBYtSkWCVLBDWkR_UmL_ojguW1C6gZVPFw",
         authDomain: "keyboardwarrior-c0a0b.firebaseapp.com",
