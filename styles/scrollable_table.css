@@ -1,0 +1,38 @@
+.table-wrapper {
+    max-height: 400px;
+    overflow: auto;
+    text-align: left;
+}
+  
+.table-wrapper td {
+    padding: 10px;
+}
+
+/* Add a class for scrollable tbody */
+.table-wrapper.scrollable tbody {
+    display: block;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+
+.table-wrapper thead {
+    padding: 10px;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    position: sticky;
+    top: 0;
+    background-color: none;
+    z-index: 1;
+    overflow-y: hidden; /*to hide vertical scrollbar*/
+}
+  
+/* Ensure that the table rows and cells still display normally */
+.table-wrapper tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 0;
+}
+  

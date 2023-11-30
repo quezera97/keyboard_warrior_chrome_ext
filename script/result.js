@@ -98,7 +98,7 @@ $( document ).ready(function() {
             });
     }
 
-    function compareHallOfFame(hallOfFameRef, hallOfFameResults, limit = 15) {
+    function compareHallOfFame(hallOfFameRef, hallOfFameResults, limit = 20) {
         get(hallOfFameRef)
             .then((snapshot) => {
                 const currentKidsEntries = snapshot.val();

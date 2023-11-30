@@ -3,6 +3,8 @@ import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
 
 $( document ).ready(function() {
 
+    let initialLevel = 'kids';
+
     $('#body_hall_of_fame').keydown(function (e) {
         if (e.key === 'Escape') {
             e.preventDefault();
@@ -24,43 +26,75 @@ $( document ).ready(function() {
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
 
-    const hallOfFameRef = ref(database, 'hall_of_fame/kids');
+    const hallOfFameRef = ref(database, 'hall_of_fame/'+initialLevel);
 
     get(hallOfFameRef)
     .then((snapshot) => {
-        const currentKidsEntries = snapshot.val();
+        const levelEntries = snapshot.val();
+        const entriesArray = Object.values(levelEntries);
 
-        var ranking = 0;
+        // Sort the entries based on accuracy and then by WPM
+        entriesArray.sort((a, b) => {
+            if (parseFloat(a.accuracy) !== parseFloat(b.accuracy)) {
+                return parseFloat(b.accuracy) - parseFloat(a.accuracy);
+            } else {
+                return parseFloat(b.wpm) - parseFloat(a.wpm);
+            }
+        });
 
-        $.each(currentKidsEntries, function(key, entry) {
+        const tableBody = $('#tableBody');
+
+        entriesArray.forEach((entry, index) => {
             const accuracy = parseFloat(entry.accuracy);
             const wpm = parseFloat(entry.wpm);
             const time = parseFloat(entry.time);
             const username = entry.username;
-        
+
             const newRow = $('<tr></tr>');
-        
+
             const rankingCell = $('<td></td>');
-            rankingCell.text(ranking += 1);
+            if (index === 0) {
+                rankingCell.text('1st');
+            } else if (index === 1) {
+                rankingCell.text('2nd');
+            } else if (index === 2) {
+                rankingCell.text('3rd');
+            } else {
+                rankingCell.text(`${index + 1}th`);
+            }
             newRow.append(rankingCell);
-        
+
             const usernameCell = $('<td></td>');
             usernameCell.text(username);
             newRow.append(usernameCell);
-        
+
             const accuracyCell = $('<td></td>');
             accuracyCell.text(accuracy);
             newRow.append(accuracyCell);
-        
+
             const wpmCell = $('<td></td>');
             wpmCell.text(wpm);
             newRow.append(wpmCell);
-        
+
             const timeCell = $('<td></td>');
             timeCell.text(time);
             newRow.append(timeCell);
-        
-            $('#tableBody').append(newRow);
+
+            tableBody.append(newRow);
         });
+
+        // Check if the content height exceeds a threshold and add scroll if necessary
+        const tableWrapper = $('.table-wrapper');
+        const tableBodyHeight = tableWrapper.innerHeight();
+        const tableBodyScrollHeight = tableWrapper[0].scrollHeight;
+
+        if (tableBodyScrollHeight > tableBodyHeight) {
+            tableWrapper.addClass('scrollable');
+        }
     })
+    .catch((error) => {
+        console.error('Error fetching hall of fame data:', error);
+    });
+
+
 });
