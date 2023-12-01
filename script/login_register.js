@@ -6,7 +6,7 @@
 import { initializeApp } from './firebase/firebase-app.js';
 import { getAnalytics } from './firebase/firebase.analytics.js';
 import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from './firebase/firebase-auth.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification  } from './firebase/firebase-auth.js';
 
 $( document ).ready(function() {
     var audioBackground = new Audio('/assets/intro.mp3');
@@ -43,7 +43,7 @@ $( document ).ready(function() {
     $('#escape-button').click(function (e) {
         stopAndSetAudioPos();
 
-        window.location.href = '../dashboard.html';
+        window.location.href = '../dashboard.html';        
     });
 
     const defaultUserData = {
@@ -67,6 +67,9 @@ $( document ).ready(function() {
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
     var username = '';
 
+    var emailRegister = null;
+    var passwordRegister = null;
+
     var modal = $("#captcha-modal");
     var span = $(".close").eq(0);
 
@@ -79,9 +82,6 @@ $( document ).ready(function() {
             modal.css("display", "none");
         }
     });
-
-    var emailRegister = null;
-    var passwordRegister = null;
 
     $('#submit_register').click(function () {
         var email = $('#email_register').val();
@@ -118,18 +118,26 @@ $( document ).ready(function() {
             const user = userCredential.user;
             const uid = user.uid;
 
-            checkUserExists(uid, 'register')
-            .then((userExists) => {
-                if (userExists) {
-                    showSnackBar('User already exist');
-                } else {
-                    setUserLevelData(uid, 'kids');
-                    setUserLevelData(uid, 'amateur');
-                    setUserLevelData(uid, 'pro');
-                    setUserLevelData(uid, 'legend');
+            sendEmailVerification(auth.currentUser)
+            .then(() => {
+                showSnackBar('Email verification sent successfully');
 
-                    signIn(auth, emailRegister, passwordRegister);
-                }
+                checkUserExists(uid, 'register')
+                .then((userExists) => {
+                    if (userExists) {
+                        showSnackBar('User already exists');
+                    } else {
+                        setUserLevelData(uid, 'kids');
+                        setUserLevelData(uid, 'amateur');
+                        setUserLevelData(uid, 'pro');
+                        setUserLevelData(uid, 'legend');
+
+                        window.location.href = './login_register.html';
+                    }
+                });
+            })
+            .catch((error) => {
+                showSnackBar('Error sending verification email');
             });
         })
         .catch((error) => {
@@ -138,6 +146,7 @@ $( document ).ready(function() {
             if (errorMessage.includes('email-already-in-use')) {
                 showSnackBar('Email is already in use');
             } else {
+                console.log(error.message);
                 showSnackBar('Invalid credentials');
             }
         });
@@ -157,7 +166,15 @@ $( document ).ready(function() {
                 showSnackBar('Please key-in your password');
             }
             else{
-                signIn(auth, email, password);
+                if (auth.currentUser) {
+                    if (auth.currentUser.emailVerified) {
+                        signIn(auth, email, password);
+                    } else {
+                        showSnackBar('User email is not verified');
+                    }
+                } else {
+                    showSnackBar('No user signed in');
+                }
             }
         }
     });
@@ -334,7 +351,7 @@ $( document ).ready(function() {
     $('#verify-captcha-2').click(function() {
         const userInput = $('#user-input-2').val();
 
-        if (userInput === captcha2.captcha) {
+        if (userInput == captcha2.result) {
             $('#message-2').text('Captcha verification successful!').css('color', 'green');
 
             isCaptcha2Verified = true;
