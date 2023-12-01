@@ -77,25 +77,30 @@ $( document ).ready(function() {
     var hallOfFameResults = {};
 
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            const uid = user.uid;
+        if (auth.currentUser.emailVerified) {
+            if (user) {
+                const uid = user.uid;
 
-            const usernameRef = ref(database, uid+'/username');
-            get(usernameRef)
-                .then((snapshot) => {
-                    const usernameValue = snapshot.val();
+                const usernameRef = ref(database, uid+'/username');
+                get(usernameRef)
+                    .then((snapshot) => {
+                        const usernameValue = snapshot.val();
 
-                    hallOfFameResults = {
-                        username: [usernameValue] ?? ['Guest'],
-                        time: timeValue,
-                        wpm: wpmValue,
-                        accuracy: accuracyValue,
-                    };
+                        hallOfFameResults = {
+                            username: [usernameValue] ?? ['Guest'],
+                            time: timeValue,
+                            wpm: wpmValue,
+                            accuracy: accuracyValue,
+                        };
 
-                    if(uid){
-                        setUserLevelData(uid, levelValue)
-                    }
-            });
+                        if(uid){
+                            setUserLevelData(uid, levelValue)
+                        }
+                });
+            }
+        }
+        else{
+            showSnackBar('User email is not verified');
         }
     });
 
@@ -181,34 +186,14 @@ $( document ).ready(function() {
             });
     }
     
+    var snackbar = $("#snackbar");
+    function showSnackBar(message) {
+        $('#snackbar-text').text(message);
+
+        snackbar.addClass("show");
+        setTimeout(function(){
+            snackbar.removeClass("show");
+        }, 3000);
+    }
     
 });
-            // let lowestEntry = null;
-            // let lowestAccuracy = Infinity;
-            // let lowestWPM = Infinity;
-            // let limitHallOfFame = 3;
-            // let pushPerformed = false;
-    // //update the new accuracy ad wpm if someone beat
-    // if (accuracy < lowestAccuracy || (accuracy == lowestAccuracy && wpm < lowestWPM)) {
-    //     lowestEntry = key;
-    //     lowestAccuracy = accuracy;
-    //     lowestWPM = wpm;
-    // }
-    // else {
-    //     //add new if not meet the limit
-    //     if(!pushPerformed && Object.keys(currentKidsEntries).length <= limitHallOfFame){
-    //         push(hallOfFameRef, hallOfFameResults)
-    //             .catch((error) => {
-    //             console.error('Error creating hall of fame record:', error);
-    //         });
-    
-    //         pushPerformed = true;
-    //     }
-    // }
-    
-    // if (hallOfFameResults.accuracy >= lowestAccuracy && hallOfFameResults.wpm >= lowestWPM) {
-    //     set(ref(database, `hall_of_fame/kids/${lowestEntry}`), hallOfFameResults)
-    //     .catch((error) => {
-    //             console.error('Error updating hall of fame record:', error);
-    //         });
-    // }

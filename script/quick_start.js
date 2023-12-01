@@ -467,6 +467,7 @@ $( document ).ready(function() {
         e.preventDefault();
     });
 
+    var snackbar = $("#snackbar");    
     function showSnackBar(message) {
         $('#snackbar-text').text(message);
 

@@ -5,8 +5,8 @@
 
 import { initializeApp } from './firebase/firebase-app.js';
 import { getAnalytics } from './firebase/firebase.analytics.js';
-import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification  } from './firebase/firebase-auth.js';
+import { getDatabase, ref, set, get, push } from './firebase/firebase-database.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, fetchSignInMethodsForEmail  } from './firebase/firebase-auth.js';
 
 $( document ).ready(function() {
     var audioBackground = new Audio('/assets/intro.mp3');
@@ -27,8 +27,6 @@ $( document ).ready(function() {
         audioBackground.pause();
         localStorage.setItem('audioPosition', audioBackground.currentTime);
     }
-
-    var snackbar = $("#snackbar");
 
     $('#body_login_register').keydown(function (e) {
         if (e.key === 'Escape') {
@@ -106,50 +104,81 @@ $( document ).ready(function() {
                     showSnackBar('Password must be same');
                 }
                 else{
-                    modal.css("display", "block");
+                    const collectionUsernameRef = ref(database, 'username');
+
+                    get(collectionUsernameRef)
+                        .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            let usernamesArray = snapshot.val();
+
+                            if(!usernamesArray.includes(username)){                                
+                                modal.css("display", "block");
+                            }
+                            else{
+                                showSnackBar('Username already taken');
+                            }
+
+                        } else {
+                            modal.css("display", "block");
+                        }
+                    });
                 }
             }
         }
     });
 
-    function registerIntoFirebase() {
-        createUserWithEmailAndPassword(auth, emailRegister, passwordRegister)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            const uid = user.uid;
-
-            sendEmailVerification(auth.currentUser)
-            .then(() => {
-                showSnackBar('Email verification sent successfully');
-
-                checkUserExists(uid, 'register')
-                .then((userExists) => {
-                    if (userExists) {
-                        showSnackBar('User already exists');
+    async function registerIntoFirebase() {
+        try {
+            const methods = await fetchSignInMethodsForEmail(auth, emailRegister);
+            
+            if (methods && methods.length > 0) {
+                showSnackBar('Email address is already in use');
+            } else {
+                const userCredential = await createUserWithEmailAndPassword(auth, emailRegister, passwordRegister);
+                const user = userCredential.user;
+                const uid = user.uid;
+    
+                const userExists = await checkUserExists(uid, 'register');
+                if (userExists) {
+                    showSnackBar('User already exists');
+                } else {
+                    await sendEmailVerification(auth.currentUser);
+                    showSnackBar('Email verification sent successfully');
+    
+                    const collectionUsernameRef = ref(database, 'username');
+                    const snapshot = await get(collectionUsernameRef);
+    
+                    if (snapshot.exists()) {
+                        let usernamesArray = snapshot.val();
+                        usernamesArray.push(username);
+                        await set(collectionUsernameRef, usernamesArray);
                     } else {
-                        setUserLevelData(uid, 'kids');
-                        setUserLevelData(uid, 'amateur');
-                        setUserLevelData(uid, 'pro');
-                        setUserLevelData(uid, 'legend');
-
-                        window.location.href = './login_register.html';
+                        await set(collectionUsernameRef, [username]);
                     }
-                });
-            })
-            .catch((error) => {
-                showSnackBar('Error sending verification email');
-            });
-        })
-        .catch((error) => {
-            const errorMessage = error.message;
+    
+                    // Setting user level data
+                    setUserLevelData(uid, 'kids');
+                    setUserLevelData(uid, 'amateur');
+                    setUserLevelData(uid, 'pro');
+                    setUserLevelData(uid, 'legend');
 
+                    stopAndSetAudioPos();
+    
+                    window.location.href = './login_register.html';
+                }
+            }
+        } catch (error) {
+            const errorMessage = error.message;
+    
             if (errorMessage.includes('email-already-in-use')) {
                 showSnackBar('Email is already in use');
+                modal.css("display", "none");
             } else {
-                console.log(error.message);
+                console.error(error.message);
                 showSnackBar('Invalid credentials');
+                modal.css("display", "none");
             }
-        });
+        }
     }
 
     $('#submit_login').click(function () {
@@ -248,12 +277,14 @@ $( document ).ready(function() {
                 return typeOfCheck == 'register' ? !!userData : userData;
             })
             .catch((error) => {
-                showSnackBar('Error checking user existence: '+ error.message);
+                showSnackBar('Error checking user existence');
                 return false;
             });
     }
 
-    function setUserLevelData(uid, level) {
+    
+
+    function setUserLevelData(uid, level) {               
         const usernameRef = ref(database, uid+'/username');
         set(usernameRef, username);
             
@@ -264,6 +295,7 @@ $( document ).ready(function() {
             });
     }
 
+    var snackbar = $("#snackbar");    
     function showSnackBar(message) {
         $('#snackbar-text').text(message);
 
@@ -340,7 +372,7 @@ $( document ).ready(function() {
             checkCaptchasAndRegister();
         } else {
             $('#message').text('Incorrect Captcha! Please try again.').css('color', 'red');
-
+            checkCaptchasAndRegister();
             isCaptcha1Verified = false;
             captcha = generateCaptcha();
 

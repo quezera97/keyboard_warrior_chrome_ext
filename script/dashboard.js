@@ -119,13 +119,18 @@ $( document ).ready(function() {
     
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            uid = user.uid;
-            
-            if(uid){
-                setUserResults(uid, 'kids');
-                setUserResults(uid, 'amateur');
-                setUserResults(uid, 'pro');
-                setUserResults(uid, 'legend');
+            if (auth.currentUser.emailVerified) {
+                uid = user.uid;
+                
+                if(uid){
+                    setUserResults(uid, 'kids');
+                    setUserResults(uid, 'amateur');
+                    setUserResults(uid, 'pro');
+                    setUserResults(uid, 'legend');
+                }
+            }
+            else{
+                showSnackBar('User email is not verified');
             }
         }
         else {
@@ -201,4 +206,13 @@ $( document ).ready(function() {
         }
     }
 
+    var snackbar = $("#snackbar");
+    function showSnackBar(message) {
+        $('#snackbar-text').text(message);
+
+        snackbar.addClass("show");
+        setTimeout(function(){
+            snackbar.removeClass("show");
+        }, 3000);
+    }
 });
