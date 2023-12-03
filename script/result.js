@@ -77,31 +77,29 @@ $( document ).ready(function() {
     var hallOfFameResults = {};
 
     onAuthStateChanged(auth, (user) => {
-        if (auth.currentUser.emailVerified) {
-            if (user) {
-                const uid = user.uid;
+        if(user && user.emailVerified){
+            const uid = user.uid;
 
-                const usernameRef = ref(database, uid+'/username');
-                get(usernameRef)
-                    .then((snapshot) => {
-                        const usernameValue = snapshot.val();
+            const usernameRef = ref(database, uid+'/username');
+            get(usernameRef)
+                .then((snapshot) => {
+                    const usernameValue = snapshot.val();
 
-                        hallOfFameResults = {
-                            username: [usernameValue] ?? ['Guest'],
-                            time: timeValue,
-                            wpm: wpmValue,
-                            accuracy: accuracyValue,
-                        };
+                    hallOfFameResults = {
+                        username: [usernameValue] ?? ['Guest'],
+                        time: timeValue,
+                        wpm: wpmValue,
+                        accuracy: accuracyValue,
+                    };
 
-                        if(uid){
-                            setUserLevelData(uid, levelValue)
-                        }
-                });
-            }
+                    if(uid){
+                        setUserLevelData(uid, levelValue)
+                    }
+            });
         }
         else{
             showSnackBar('User email is not verified');
-        }
+            }
     });
 
     function setUserLevelData(uid, level) {

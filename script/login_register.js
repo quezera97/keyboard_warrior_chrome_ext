@@ -195,15 +195,7 @@ $( document ).ready(function() {
                 showSnackBar('Please key-in your password');
             }
             else{
-                if (auth.currentUser) {
-                    if (auth.currentUser.emailVerified) {
-                        signIn(auth, email, password);
-                    } else {
-                        showSnackBar('User email is not verified');
-                    }
-                } else {
-                    showSnackBar('No user signed in');
-                }
+                signIn(auth, email, password);
             }
         }
     });
@@ -219,35 +211,37 @@ $( document ).ready(function() {
                 const user = userCredential.user;
                 const uid = user.uid;
 
-                const storedUid = localStorage.getItem("uid");
+                if(user.emailVerified){
+                    const storedUid = localStorage.getItem("uid");
 
-                checkStoredUid(storedUid, uid);
+                    checkStoredUid(storedUid, uid);
 
-                checkUserExists(uid, 'login')
-                .then((userExists) => {
-                    if (userExists) {
-                        var detailLevels = userExists.records.levels;
+                    checkUserExists(uid, 'login')
+                    .then((userExists) => {
+                        if (userExists) {
+                            var detailLevels = userExists.records.levels;
 
-                        var detailKid = detailLevels.kids;
-                        var detailAmateur = detailLevels.amateur;
-                        var detailLegend = detailLevels.legend;
-                        var detailPro = detailLevels.pro;
+                            var detailKid = detailLevels.kids;
+                            var detailAmateur = detailLevels.amateur;
+                            var detailLegend = detailLevels.legend;
+                            var detailPro = detailLevels.pro;
 
-                        localStorage.setItem("kids", JSON.stringify(detailKid));
-                        localStorage.setItem("amateur", JSON.stringify(detailAmateur));
-                        localStorage.setItem("legend", JSON.stringify(detailLegend));
-                        localStorage.setItem("pro", JSON.stringify(detailPro));
+                            localStorage.setItem("kids", JSON.stringify(detailKid));
+                            localStorage.setItem("amateur", JSON.stringify(detailAmateur));
+                            localStorage.setItem("legend", JSON.stringify(detailLegend));
+                            localStorage.setItem("pro", JSON.stringify(detailPro));
 
-                        stopAndSetAudioPos();
-                        
-                        window.location.href = '../dashboard.html';
+                            stopAndSetAudioPos();
+                            
+                            window.location.href = '../dashboard.html';
 
-                        showSnackBar('Logged in');
+                            showSnackBar('Logged in');
 
-                    } else {
-                        showSnackBar('User not found. Please register');
-                    }
-                });
+                        } else {
+                            showSnackBar('User not found. Please register');
+                        }
+                    });
+                }
             })
             .catch((e) => {
                 showSnackBar('Incorrect login credentials');
@@ -317,7 +311,7 @@ $( document ).ready(function() {
     }
 
     function generateCaptcha() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()-_=+[{]}|;:,<.>/?';
+        const chars = 'ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz023456789~!@#$%^&*()-_=+[{]};:,<.>/?';
         let captchaCode = '';
         for (let i = 0; i < 10; i++) {
             captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));

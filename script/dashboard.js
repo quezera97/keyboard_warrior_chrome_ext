@@ -119,7 +119,7 @@ $( document ).ready(function() {
     
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            if (auth.currentUser.emailVerified) {
+            if (user.emailVerified) {
                 uid = user.uid;
                 
                 if(uid){
