@@ -122,11 +122,13 @@ $( document ).ready(function() {
             if (user.emailVerified) {
                 uid = user.uid;
                 
+                const usernameRef = ref(database, uid+'/username');
+
                 if(uid){
-                    setUserResults(uid, 'kids');
-                    setUserResults(uid, 'amateur');
-                    setUserResults(uid, 'pro');
-                    setUserResults(uid, 'legend');
+                    setUserResults(uid, usernameRef, 'kids');
+                    setUserResults(uid, usernameRef, 'amateur');
+                    setUserResults(uid, usernameRef, 'pro');
+                    setUserResults(uid, usernameRef, 'legend');
                 }
             }
             else{
@@ -158,8 +160,7 @@ $( document ).ready(function() {
     }
 
 
-    function setUserResults(uid, level) {
-        const usernameRef = ref(database, uid+'/username');
+    function setUserResults(uid, usernameRef, level) {
         get(usernameRef)
             .then((snapshot) => {
                 const username = snapshot.val();
@@ -203,6 +204,10 @@ $( document ).ready(function() {
             $(`#${level}-time-result`).text(stats.time != '' ? stats.time : 0);
             $(`#${level}-wpm-result`).text(stats.wpm != '' ? stats.wpm : 0);
             $(`#${level}-accuracy-result`).text(stats.accuracy != '' ? stats.accuracy : 0);
+
+            var username = localStorage.getItem('username');
+            
+            $('#username').text(username != '' ? username : 'Spartan');
         }
     }
 

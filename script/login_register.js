@@ -206,6 +206,8 @@ $( document ).ready(function() {
     }
 
     function signIn(auth, email, password) {
+        showLoadingIndicator();
+
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -238,12 +240,14 @@ $( document ).ready(function() {
                             showSnackBar('Logged in');
 
                         } else {
+                            hideLoadingIndicator();
                             showSnackBar('User not found. Please register');
                         }
                     });
                 }
             })
             .catch((e) => {
+                hideLoadingIndicator();
                 showSnackBar('Incorrect login credentials');
             });        
     }
@@ -391,4 +395,12 @@ $( document ).ready(function() {
             $('#captcha-code-2').text(captcha2.captcha);
         }
     });
+
+    function showLoadingIndicator() {
+        $('#loading-overlay').css('display', 'flex');
+    }
+
+    function hideLoadingIndicator() {
+        $('#loading-overlay').css('display', 'none');
+    }
 });
