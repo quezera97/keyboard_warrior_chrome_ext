@@ -234,6 +234,8 @@ $( document ).ready(function() {
                             localStorage.setItem("pro", JSON.stringify(detailPro));
 
                             stopAndSetAudioPos();
+
+                            localStorage.setItem('user', 'spartan');
                             
                             window.location.href = '../dashboard.html';
 
@@ -244,6 +246,10 @@ $( document ).ready(function() {
                             showSnackBar('User not found. Please register');
                         }
                     });
+                }
+                else{
+                    hideLoadingIndicator();
+                    showSnackBar('Email not verified. Please verify your email.');
                 }
             })
             .catch((e) => {
@@ -317,7 +323,7 @@ $( document ).ready(function() {
     function generateCaptcha() {
         const chars = 'ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz023456789~!@#$%^&*()-_=+[{]};:,<.>/?';
         let captchaCode = '';
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
         }
 

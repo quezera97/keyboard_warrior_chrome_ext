@@ -5,7 +5,14 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
 
-        <link href="/styles/styles.css" rel="stylesheet"/>        
+        <link href="/styles/styles.css" rel="stylesheet"/>    
+        <link href="../styles/nav_bar.css" rel="stylesheet"/> 
+        <style>
+            #chartContainer {
+                width: 600px;
+                height: 400px;
+            }
+        </style>   
     </head>
     <body id="body_user_profile">
         <main>
@@ -23,11 +30,18 @@
                     </div>
                 </div>
                 <div>
-                    Future Updates Incoming
+                    <div class="topnav nav-level">
+                        <a value="kids_profile" class="active">Helots</a>
+                        <a value="amateur_profile">Perioikoi</a>
+                        <a value="legend_profile">Spartans</a>
+                        <a value="pro_profile">Gods</a>
+                    </div>
+                    <canvas id="myChart"></canvas>
                 </div>
             </div>
         </main>
         <script src="../script/jquery-3.7.1.min.js"></script>
         <script type="module" src="/script/user_profile.js"></script>
+        <script type="module" src="/script/chart-4.4.0.js"></script>
     </body>
 </html>

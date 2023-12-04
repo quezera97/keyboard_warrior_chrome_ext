@@ -75,6 +75,7 @@ $( document ).ready(function() {
     const auth = getAuth(app);
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
     var hallOfFameResults = {};
+    var profileResults = {};
 
     onAuthStateChanged(auth, (user) => {
         if(user && user.emailVerified){
@@ -92,15 +93,92 @@ $( document ).ready(function() {
                         accuracy: accuracyValue,
                     };
 
+                    var newDate = new Date();
+                    var formattedDateTime = newDate.toLocaleString();
+                    profileResults  = {
+                        time: timeValue,
+                        wpm: wpmValue,
+                        accuracy: accuracyValue,
+                        inaccuracy: inaccuracyValue,
+                        dateTime: formattedDateTime,
+                    };
+
                     if(uid){
-                        setUserLevelData(uid, levelValue)
+                        setUserLevelData(uid, levelValue);
+                        setProfileResults(uid, levelValue);
                     }
-            });
+            });            
         }
         else{
             showSnackBar('User email is not verified');
-            }
+        }
     });
+
+    function setProfileResults(uid, level) {
+        const profileResultRef = ref(database, uid+'/records/profile_results/'+level);
+
+        get(profileResultRef).then((snapshot) => {
+            if ((snapshot.val())) {
+                compareProfileResult(uid, level, profileResultRef, profileResults);
+            } else {
+                push(profileResultRef, profileResults)
+                    .catch((error) => {
+                    console.error('Error creating hall of fame record:', error);
+                });
+            }
+        });
+    }
+
+    function compareProfileResult(uid, level, profileResultRef, profileResults, limit = 15) {
+        get(profileResultRef)
+            .then((snapshot) => {
+                const currentKidsEntries = snapshot.val() || {}; 
+    
+                const entriesArray = Object.keys(currentKidsEntries).map(key => ({
+                    key,
+                    ...currentKidsEntries[key]
+                }));
+    
+                // Check if not reaching the limit, then push new entry
+                if (entriesArray.length < limit) {
+                    push(profileResultRef, profileResults)
+                        .catch((error) => {
+                            console.error('Error adding new entry to hall of fame:', error);
+                        });
+                }
+                else{
+                    let oldestEntryKey = entriesArray[0].key;
+                    let oldestDateTime = new Date(entriesArray[0].dateTime);
+
+                    for (let i = 1; i < entriesArray.length; i++) {
+                        const currentDateTime = new Date(entriesArray[i].dateTime);
+                        if (currentDateTime < oldestDateTime) {
+                            oldestDateTime = currentDateTime;
+                            oldestEntryKey = entriesArray[i].key;
+                        }
+                    }
+
+                    const newDateTime = new Date(profileResults.dateTime);
+                    if (newDateTime > oldestDateTime) {
+                        set(ref(database, uid + '/records/profile_results/' + level + '/' + oldestEntryKey), null)
+                            .then(() => {
+                                // Push the new entry
+                                push(ref(database, uid + '/records/profile_results/' + level), profileResults)
+                                    .catch((error) => {
+                                        console.error('Error adding new entry to profile results:', error);
+                                    });
+                            })
+                            .catch((error) => {
+                                console.error('Error deleting oldest entry:', error);
+                            });
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching results:', error);
+            });
+    }
+    
 
     function setUserLevelData(uid, level) {
 
@@ -174,7 +252,7 @@ $( document ).ready(function() {
                         set(ref(database, `hall_of_fame/kids/${lowestEntry.key}`), hallOfFameResults)
                             .catch((error) => {
                                 console.error('Error updating lowest entry in hall of fame record:', error);
-                            });
+                        });
                     }
                     }
                 }

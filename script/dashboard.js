@@ -5,6 +5,12 @@ import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.
 $( document ).ready(function() {
     $('#dummy-container').show();
 
+    let typeOfUser = localStorage.getItem('user');
+    if(typeOfUser == 'ghost'){
+        setForGhostLogin();
+    }
+
+
     var audioSparta = new Audio('/assets/intro_sparta.mp3');
     audioSparta.volume = 0.4;
     audioSparta.play();
@@ -79,10 +85,27 @@ $( document ).ready(function() {
     });
 
     $('#login-user').click(function () {
-        stopAndSetAudioPos();
+        stopAndSetAudioPos();       
 
         window.location.href = '../pages/login_register.html'
     });
+
+    $('#login-ghost').click(function () {
+        localStorage.setItem('user', 'ghost');
+
+        setForGhostLogin();
+    });
+
+    function setForGhostLogin(){
+        displayStatsLocalStorage('kids');
+        displayStatsLocalStorage('amateur');
+        displayStatsLocalStorage('pro');
+        displayStatsLocalStorage('legend');
+
+        showDivFaction('ghost');
+
+        $('#username').text('Undead Warrior');
+    }
 
     $('#user-profile').click(function () {
         stopAndSetAudioPos();
@@ -102,48 +125,97 @@ $( document ).ready(function() {
         window.location.href = '../pages/hall_of_fame.html'
     });
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBYtSkWCVLBDWkR_UmL_ojguW1C6gZVPFw",
-        authDomain: "keyboardwarrior-c0a0b.firebaseapp.com",
-        projectId: "keyboardwarrior-c0a0b",
-        storageBucket: "keyboardwarrior-c0a0b.appspot.com",
-        messagingSenderId: "838198639101",
-        appId: "1:838198639101:web:cfe0a3eecc334ace418194",
-        measurementId: "G-ZC2XJ3JLGJ"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
-    var uid = localStorage.getItem('uid');
-    
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            if (user.emailVerified) {
-                uid = user.uid;
-                
-                const usernameRef = ref(database, uid+'/username');
+    if(typeOfUser == 'spartan'){
+        const firebaseConfig = {
+            apiKey: "AIzaSyBYtSkWCVLBDWkR_UmL_ojguW1C6gZVPFw",
+            authDomain: "keyboardwarrior-c0a0b.firebaseapp.com",
+            projectId: "keyboardwarrior-c0a0b",
+            storageBucket: "keyboardwarrior-c0a0b.appspot.com",
+            messagingSenderId: "838198639101",
+            appId: "1:838198639101:web:cfe0a3eecc334ace418194",
+            measurementId: "G-ZC2XJ3JLGJ"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
+        var uid = localStorage.getItem('uid');
 
-                if(uid){
-                    setUserResults(uid, usernameRef, 'kids');
-                    setUserResults(uid, usernameRef, 'amateur');
-                    setUserResults(uid, usernameRef, 'pro');
-                    setUserResults(uid, usernameRef, 'legend');
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user.emailVerified) {
+                    uid = user.uid;
+                    
+                    const usernameRef = ref(database, uid+'/username');
+    
+                    if(uid){
+                        setUserResults(uid, usernameRef, 'kids');
+                        setUserResults(uid, usernameRef, 'amateur');
+                        setUserResults(uid, usernameRef, 'pro');
+                        setUserResults(uid, usernameRef, 'legend');
+                    }
+
+                    function setUserResults(uid, usernameRef, level) {
+                        get(usernameRef)
+                            .then((snapshot) => {
+                                const username = snapshot.val();
+                
+                                $('#username').text(username != '' ? username : 'Spartan');
+                
+                                localStorage.setItem('username', username ?? 'Guest');
+                        });
+                
+                        const userRecordsRef = ref(database, uid+'/records/levels/'+level);
+                        
+                        get(userRecordsRef)
+                            .then((snapshot) => {
+                                const resultsFromFirebase = snapshot.val();
+                
+                                $(`#${level}-time-result`).text(resultsFromFirebase.time != '' ? resultsFromFirebase.time : 0);
+                                $(`#${level}-wpm-result`).text(resultsFromFirebase.wpm != '' ? resultsFromFirebase.wpm : 0);
+                                $(`#${level}-accuracy-result`).text(resultsFromFirebase.accuracy != '' ? resultsFromFirebase.accuracy : 0);
+                
+                                const results = {
+                                    time: resultsFromFirebase.time != '' ? resultsFromFirebase.time : 0,
+                                    wpm: resultsFromFirebase.wpm != '' ? resultsFromFirebase.wpm : 0,
+                                    accuracy: resultsFromFirebase.accuracy != '' ? resultsFromFirebase.accuracy : 0,
+                                };
+                
+                                localStorage.setItem(level, JSON.stringify(results));
+                
+                                return results;
+                            })
+                            .catch((error) => {
+                                console.error('Error checking user existence:', error.message);
+                                return false;
+                            });
+                    }
+                }
+                else{
+                    showSnackBar('User email is not verified');
                 }
             }
-            else{
-                showSnackBar('User email is not verified');
+            else {
+                displayStatsLocalStorage('kids');
+                displayStatsLocalStorage('amateur');
+                displayStatsLocalStorage('pro');
+                displayStatsLocalStorage('legend');
             }
-        }
-        else {
-            displayStatsLocalStorage('kids');
-            displayStatsLocalStorage('amateur');
-            displayStatsLocalStorage('pro');
-            displayStatsLocalStorage('legend');
-        }
+    
+            showDivFaction(uid);
+        });
+    }
+    else if(typeOfUser == 'ghost'){
+        setForGhostLogin();
+    }
+    else{
+        displayStatsLocalStorage('kids');
+        displayStatsLocalStorage('amateur');
+        displayStatsLocalStorage('pro');
+        displayStatsLocalStorage('legend');
 
         showDivFaction(uid);
-    });
+    }
 
     function showDivFaction(uid){
         $('#user-faction-container').show();
@@ -157,43 +229,6 @@ $( document ).ready(function() {
             $('#faction-selection-container').show();
             $('#user-profile-container').hide();
         }
-    }
-
-
-    function setUserResults(uid, usernameRef, level) {
-        get(usernameRef)
-            .then((snapshot) => {
-                const username = snapshot.val();
-
-                $('#username').text(username != '' ? username : 'Spartan');
-
-                localStorage.setItem('username', username ?? 'Guest');
-        });
-
-        const userRecordsRef = ref(database, uid+'/records/levels/'+level);
-        
-        get(userRecordsRef)
-            .then((snapshot) => {
-                const resultsFromFirebase = snapshot.val();
-
-                $(`#${level}-time-result`).text(resultsFromFirebase.time != '' ? resultsFromFirebase.time : 0);
-                $(`#${level}-wpm-result`).text(resultsFromFirebase.wpm != '' ? resultsFromFirebase.wpm : 0);
-                $(`#${level}-accuracy-result`).text(resultsFromFirebase.accuracy != '' ? resultsFromFirebase.accuracy : 0);
-
-                const results = {
-                    time: resultsFromFirebase.time != '' ? resultsFromFirebase.time : 0,
-                    wpm: resultsFromFirebase.wpm != '' ? resultsFromFirebase.wpm : 0,
-                    accuracy: resultsFromFirebase.accuracy != '' ? resultsFromFirebase.accuracy : 0,
-                };
-
-                localStorage.setItem(level, JSON.stringify(results));
-
-                return results;
-            })
-            .catch((error) => {
-                console.error('Error checking user existence:', error.message);
-                return false;
-            });
     }
 
     function displayStatsLocalStorage(level) {
