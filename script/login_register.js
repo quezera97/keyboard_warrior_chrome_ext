@@ -43,12 +43,6 @@ $( document ).ready(function() {
 
         window.location.href = '../dashboard.html';        
     });
-
-    const defaultUserData = {
-        time: '',
-        wpm: '',
-        accuracy: '',
-    };
     
     const firebaseConfig = {
         apiKey: "AIzaSyBYtSkWCVLBDWkR_UmL_ojguW1C6gZVPFw",
@@ -286,11 +280,18 @@ $( document ).ready(function() {
             });
     }
 
-    
-
     function setUserLevelData(uid, level) {               
         const usernameRef = ref(database, uid+'/username');
-        set(usernameRef, username);
+        set(usernameRef, username)
+            .catch((error) => {
+                showSnackBar('Unexpected error occured: '+ error.message);
+            });
+
+        const defaultUserData = {
+            time: '',
+            wpm: '',
+            accuracy: '',
+        };
             
         const userRecordsRef = ref(database, uid+'/records/levels/'+level);
         set(userRecordsRef, defaultUserData)            

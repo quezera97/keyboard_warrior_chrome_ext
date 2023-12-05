@@ -6,10 +6,13 @@
         <meta name="viewport" content="width=device-width" />
 
         <link href="../styles/styles.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/styles/snackbar.css">
+        <link rel="stylesheet" href="/styles/select2-4.1.0.min.css">
     </head>
     <body id="body_pvp">
         <main> 
             <div>
+                <div id="snackbar"><span id="snackbar-text"></span></div>
                 <div class="top-container">
                     <div>
                         <button id="escape-button" class="icon-button" data-toggle="tooltip" data-placement="bottom" title="Escape"> 
@@ -28,11 +31,14 @@
                     </div>
                 </div>
                 <div>
-                    Future Updates Incoming
+                    Global PVP
+                    <select class="select2 dropdown" id="list-username">                        
+                    </select>
                 </div>
             </div>
         </main>
         <script src="../script/jquery-3.7.1.min.js"></script>
-        <script src="../script/pvp.js"></script>
+        <script type="module" src="../script/select2-4.1.0.min.js"></script>
+        <script type="module" src="../script/pvp.js"></script>
     </body>
 </html>

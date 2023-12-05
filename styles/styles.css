@@ -238,3 +238,9 @@ main {
   letter-spacing: 1px;
   padding-left: 10px;
 }
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+}
