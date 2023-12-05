@@ -56,7 +56,7 @@ $( document ).ready(function() {
     let uid = null;
 
     let initialLevel = 'kids_profile';
-    let myChart;
+    let profileChart;
 
     if(typeOfUser == 'ghost'){
         getLevelResultProfile(initialLevel);
@@ -115,11 +115,13 @@ $( document ).ready(function() {
                     key,
                     ...levelEntries[key]
                 }));
-    
-                const labels = entriesArray.map(entry => entry.key);
+
+                // const labels = entriesArray.map(entry => entry.key);
+                const labels = entriesArray.map(entry => (entry.dateTime));
                 const wpmData = entriesArray.map(entry => parseFloat(entry.wpm));
                 const accuracyData = entriesArray.map(entry => parseFloat(entry.accuracy));
                 const inaccuracyData = entriesArray.map(entry => parseFloat(entry.inaccuracy));
+                
                 renderChart(labels, wpmData, accuracyData, inaccuracyData);
             }
             else{
@@ -164,17 +166,17 @@ $( document ).ready(function() {
     }
 
     function renderChart(labels, wpmData, accuracyData, inaccuracyData) {
-        const ctx = $('#myChart');
+        const ctx = $('#profileChart');
 
-        if (myChart) {
-            myChart.data.labels = labels;
-            myChart.data.datasets[0].data = wpmData;
-            myChart.data.datasets[1].data = accuracyData;
-            myChart.data.datasets[2].data = inaccuracyData;
-            myChart.update();
+        if (profileChart) {
+            profileChart.data.labels = labels;
+            profileChart.data.datasets[0].data = wpmData;
+            profileChart.data.datasets[1].data = accuracyData;
+            profileChart.data.datasets[2].data = inaccuracyData;
+            profileChart.update();
         } else {
-            myChart = new Chart(ctx, {
-                type: 'bar',
+            profileChart = new Chart(ctx, {
+                type: 'line',
                 data: {
                     labels: labels,
                     datasets: [
@@ -203,6 +205,13 @@ $( document ).ready(function() {
                 },
                 options: {
                     scales: {
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 90,
+                                minRotation: 90
+                            }
+                        },
                         y: {
                             beginAtZero: true
                         }

@@ -386,7 +386,7 @@ $( document ).ready(function() {
             $('#quoteInput').attr('disabled', true);
             $('#reset-hint').hide();
         }
-        else  if (e.key === 'Escape') {
+        else if (e.key === 'Escape') {
             e.preventDefault();
 
             pauseTimer();
@@ -395,6 +395,9 @@ $( document ).ready(function() {
             $('#quoteInput').addClass('overlay');
             $('#quoteInput').attr('disabled', true);
             $('#reset-hint').hide();
+        }
+        else if (e.key === 'Enter') {
+            e.preventDefault();
         }
     });
 
@@ -419,6 +422,9 @@ $( document ).ready(function() {
                 startTimer();
             }, 1000);
         }
+        else if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     });
 
     $('#escape').keydown(function (e) {
@@ -436,6 +442,9 @@ $( document ).ready(function() {
                 window.location.href = '../dashboard.html';
             }
 
+        }
+        else if (e.key === 'Enter') {
+            e.preventDefault();
         }
     });
 

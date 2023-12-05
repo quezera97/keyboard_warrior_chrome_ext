@@ -129,7 +129,7 @@ $( document ).ready(function() {
         });
     }
 
-    function compareProfileResult(uid, level, profileResultRef, profileResults, limit = 15) {
+    function compareProfileResult(uid, level, profileResultRef, profileResults, limit = 10) {
         get(profileResultRef)
             .then((snapshot) => {
                 const currentKidsEntries = snapshot.val() || {}; 

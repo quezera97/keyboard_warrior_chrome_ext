@@ -4,12 +4,12 @@ import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.
 
 $( document ).ready(function() {
     $('#dummy-container').show();
+    showLoadingIndicator();
 
     let typeOfUser = localStorage.getItem('user');
     if(typeOfUser == 'ghost'){
         setForGhostLogin();
     }
-
 
     var audioSparta = new Audio('/assets/intro_sparta.mp3');
     audioSparta.volume = 0.4;
@@ -105,6 +105,8 @@ $( document ).ready(function() {
         showDivFaction('ghost');
 
         $('#username').text('Undead Warrior');
+
+        hideLoadingIndicator();
     }
 
     $('#user-profile').click(function () {
@@ -125,7 +127,7 @@ $( document ).ready(function() {
         window.location.href = '../pages/hall_of_fame.html'
     });
 
-    if(typeOfUser == 'spartan'){
+    if(typeOfUser == 'spartan'){        
         const firebaseConfig = {
             apiKey: "AIzaSyBYtSkWCVLBDWkR_UmL_ojguW1C6gZVPFw",
             authDomain: "keyboardwarrior-c0a0b.firebaseapp.com",
@@ -229,6 +231,8 @@ $( document ).ready(function() {
             $('#faction-selection-container').show();
             $('#user-profile-container').hide();
         }
+
+        hideLoadingIndicator();
     }
 
     function displayStatsLocalStorage(level) {
@@ -254,5 +258,13 @@ $( document ).ready(function() {
         setTimeout(function(){
             snackbar.removeClass("show");
         }, 3000);
+    }
+
+    function showLoadingIndicator() {
+        $('#loading-overlay').css('display', 'flex');
+    }
+
+    function hideLoadingIndicator() {
+        $('#loading-overlay').css('display', 'none');
     }
 });
