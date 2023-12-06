@@ -58,7 +58,7 @@ $( document ).ready(function() {
             let usernameData = snapshot.val();
 
             $("#list-username").select2({
-                data: usernameData
+                data: usernameData,
             });
         }
         else{ showSnackBar('Error getting information'); }
