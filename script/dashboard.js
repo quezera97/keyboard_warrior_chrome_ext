@@ -118,13 +118,20 @@ $( document ).ready(function() {
     $('#pvp').click(function () {
         stopAndSetAudioPos();
 
-        window.location.href = '../pages/pvp.html'
+        window.location.href = '../pages/pvp.html' + 
+            '?username=' + encodeURIComponent($('#username').text());
     });
 
     $('#hall-of-fame').click(function () {
         stopAndSetAudioPos();
 
         window.location.href = '../pages/hall_of_fame.html'
+    });
+
+    $('#notification').click(function () {
+        stopAndSetAudioPos();
+
+        window.location.href = '../pages/notification.html'
     });
 
     if(typeOfUser == 'spartan'){        

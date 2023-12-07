@@ -2,7 +2,7 @@
 .dropdown {
     position: relative;
     display: inline-block;
-    width: 200px;
+    width: 600px;
 }
 
 .select2-dropdown {
@@ -19,14 +19,20 @@
 
   .select2-container--default .select2-selection--single {
     background-color: rgb(50, 49, 49);
-    border: 1px solid white;
+    border: 1px solid gold;
     border-radius: 4px;
+    animation: glow 1s infinite alternate;
+    padding: 10px;
+    height: 50px;
   }
+
   .select2-container--default
     .select2-selection--single
     .select2-selection__rendered {
     color: gold;
     line-height: 28px;
+    font-size: 25px;
+    text-overflow: ellipsis;
   }
 
   .select2-search--dropdown .select2-search__field {

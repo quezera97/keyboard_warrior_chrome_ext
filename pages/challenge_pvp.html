@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Keyboard Warrior - Sparta</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+
+        <link href="../styles/styles.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/styles/snackbar.css">
+    </head>
+    <body id="body_challenge_pvp">
+        <main> 
+            <div>
+                <div id="snackbar"><span id="snackbar-text"></span></div>
+                <div class="top-container">
+                    <div class="timer">
+                        <span>Time:</span>
+                        <span id="timer">0</span>
+                    </div>
+                    <div>
+                        <span>Accuracy (%):</span>
+                        <span id="accuracy">0</span>
+                    </div>
+                    <div>
+                        <span>Inaccuracy (%):</span>
+                        <span id="inaccuracy">0</span>
+                    </div>
+                    <div>
+                        <span>Words/min:</span>
+                        <span id="wpm">0</span>
+                    </div>
+                </div>
+                <div class="display-container" id="quoteDisplay"><span></span></div>
+                <div class="input-quote-container">
+                    <textarea class="quote-input" name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
+                    <button class="reset-button" id="reset" hidden>Press 'Tab' to reset</button>
+                    <button class="escape-button" id="escape" hidden>Press 'Escape' to escape</button>
+                    <div id="readyIndicator" class="ready-indicator">
+                        <span>R</span>
+                        <span>E</span>
+                        <span>A</span>
+                        <span>D</span>
+                        <span>Y</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="../script/jquery-3.7.1.min.js"></script>
+        <script type="module" src="../script/challenge_pvp.js"></script>
+    </body>
+</html>

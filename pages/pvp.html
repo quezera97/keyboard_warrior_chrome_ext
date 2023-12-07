@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="/styles/snackbar.css">
         <link rel="stylesheet" href="/styles/select2-4.1.0.min.css">
         <link rel="stylesheet" href="/styles/select2.css">
+        <link href="../styles/nav_bar.css" rel="stylesheet"/>
     </head>
     <body id="body_pvp">
         <main> 
@@ -32,8 +33,68 @@
                     </div>
                 </div>
                 <div>
-                    Global PVP
-                    <select class="select2 dropdown" id="list-username"></select>
+                    <div class="topnav nav-level">
+                        <a value="ongoing" class="active">Ongoing</a>
+                        <a value="global">Global PVP</a>
+                        <a value="challenge">Challenge</a>
+                    </div>
+                    <div class="pvp-container">
+                        <div id="ongoing-pvp">
+                            <table class="normal-table">
+                                <tr>
+                                    <td><span id="date-pvp"></span></td>
+                                    <td><span id="status-pvp"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Challenger:</td>
+                                    <td><span id="challenger-pvp" style="text-overflow: ellipsis;"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Opponent:</td>
+                                    <td><span id="opponent-pvp" style="text-overflow: ellipsis;"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Level:</td>
+                                    <td><span id="level-pvp"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Time:</td>
+                                    <td><span id="time-pvp"></span> sec</td>
+                                </tr>
+                                <tr>
+                                    <td>WPM:</td>
+                                    <td><span id="wpm-pvp"></span> words/min</td>
+                                </tr>
+                                <tr>
+                                    <td>Accuracy:</td>
+                                    <td><span id="accuracy-pvp"></span> %</td>
+                                </tr>
+                                <tr>
+                                    <td>Inaccuracy:</td>
+                                    <td><span id="inaccuracy-pvp"></span> %</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="global-pvp">
+                            <div  style="margin-bottom: 15px;">
+                                <select class="select2 dropdown" id="list-username">
+                                    <option value="" selected>Choose your opponent</option>
+                                </select>
+                            </div>
+                            <div  style="margin-bottom: 15px;">
+                                <select class="select2 dropdown" id="list-level">
+                                    <option value="" selected>Choose your level</option>
+                                    <option value="amateur">Perioikoi</option>
+                                    <option value="pro">Spartans</option>
+                                    <option value="legend">Gods</option>
+                                </select>
+                            </div>
+                            <div style="text-align: center; margin-top: 20%;">
+                                <button id="begin-battle" class="generate-custom" style="margin: 15px;">Begin Battle</button>
+                            </div>
+                        </div>
+                        <div id="challenge-pvp"></div>
+                    </div>
                 </div>
             </div>
         </main>
