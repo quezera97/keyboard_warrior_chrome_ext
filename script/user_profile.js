@@ -134,7 +134,7 @@ $( document ).ready(function() {
                 renderChart(labels, wpmData, accuracyData, inaccuracyData);  
             }
         } catch (error) {
-            console.error('Error fetching results:', error);
+            showSnackBar('Error fetching results:', error);
         }
     }
 
@@ -219,5 +219,15 @@ $( document ).ready(function() {
                 }
             });
         }
+    }
+
+    var snackbar = $("#snackbar");
+    function showSnackBar(message) {
+        $('#snackbar-text').text(message);
+
+        snackbar.addClass("show");
+        setTimeout(function(){
+            snackbar.removeClass("show");
+        }, 3000);
     }
 });

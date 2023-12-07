@@ -123,7 +123,7 @@ $( document ).ready(function() {
             } else {
                 push(profileResultRef, profileResults)
                     .catch((error) => {
-                    console.error('Error creating hall of fame record:', error);
+                    showSnackBar('Error creating hall of fame record:', error);
                 });
             }
         });
@@ -143,7 +143,7 @@ $( document ).ready(function() {
                 if (entriesArray.length < limit) {
                     push(profileResultRef, profileResults)
                         .catch((error) => {
-                            console.error('Error adding new entry to hall of fame:', error);
+                            showSnackBar('Error adding new entry to hall of fame:', error);
                         });
                 }
                 else{
@@ -165,17 +165,17 @@ $( document ).ready(function() {
                                 // Push the new entry
                                 push(ref(database, uid + '/records/profile_results/' + level), profileResults)
                                     .catch((error) => {
-                                        console.error('Error adding new entry to profile results:', error);
+                                        showSnackBar('Error adding new entry to profile results:', error);
                                     });
                             })
                             .catch((error) => {
-                                console.error('Error deleting oldest entry:', error);
+                                showSnackBar('Error deleting oldest entry:', error);
                             });
                     }
                 }
             })
             .catch((error) => {
-                console.error('Error fetching results:', error);
+                showSnackBar('Error fetching results:', error);
             });
     }
     
@@ -190,7 +190,7 @@ $( document ).ready(function() {
             } else {
                 push(hallOfFame, hallOfFameResults)
                     .catch((error) => {
-                    console.error('Error creating hall of fame record:', error);
+                    showSnackBar('Error creating hall of fame record:', error);
                 });
             }
         });
@@ -198,7 +198,7 @@ $( document ).ready(function() {
         const userRecordsRef = ref(database, uid+'/records/levels/'+level);
         set(userRecordsRef, results)
             .catch((error) => {
-                console.error(`Error creating child record for the "${level}" level`);
+                showSnackBar(`Error creating child record for the "${level}" level`);
             });
     }
 
@@ -224,7 +224,7 @@ $( document ).ready(function() {
                         matchingEntry.username.push(hallOfFameResults.username[0]);
                         set(ref(database, `hall_of_fame/kids/${matchingEntry.key}/username`), matchingEntry.username)
                             .catch((error) => {
-                                console.error('Error updating username in hall of fame record:', error);
+                                showSnackBar('Error updating username in hall of fame record:', error);
                             });
                     }
                 } else {
@@ -240,7 +240,7 @@ $( document ).ready(function() {
                         // Add new entry if not reaching the limit
                         push(hallOfFameRef, hallOfFameResults)
                             .catch((error) => {
-                                console.error('Error adding new entry to hall of fame:', error);
+                                showSnackBar('Error adding new entry to hall of fame:', error);
                             });
                     } else {
                         const lowestEntry = entriesArray[entriesArray.length - 1];
@@ -251,14 +251,14 @@ $( document ).ready(function() {
                         if ((hallOfFameResults.accuracy >= lowestAccuracy && hallOfFameResults.wpm >= lowestWPM) || (hallOfFameResults.accuracy == lowestAccuracy && hallOfFameResults.wpm >= lowestWPM)) {
                         set(ref(database, `hall_of_fame/kids/${lowestEntry.key}`), hallOfFameResults)
                             .catch((error) => {
-                                console.error('Error updating lowest entry in hall of fame record:', error);
+                                showSnackBar('Error updating lowest entry in hall of fame record:', error);
                         });
                     }
                     }
                 }
             })
             .catch((error) => {
-                console.error('Error fetching hall of fame data:', error);
+                showSnackBar('Error fetching hall of fame data:', error);
             });
     }
     

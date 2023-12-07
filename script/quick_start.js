@@ -93,7 +93,7 @@ $( document ).ready(function() {
             }
 
         } catch (error) {
-            console.error('Error fetching or displaying quote:', error);
+            showSnackBar('Error fetching or displaying quote:');
         }
     }
     

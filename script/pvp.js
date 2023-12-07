@@ -1,5 +1,6 @@
 import { initializeApp } from './firebase/firebase-app.js'
 import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
+import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.js'
 
 $( document ).ready(function() {
     
@@ -87,18 +88,45 @@ $( document ).ready(function() {
     };
     
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
+    let userVerified = false;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            if (user.emailVerified) {
+                userVerified = true;
+            }
+        }
+    });
 
     const getGlobalPvp = ref(database, 'pvp');
+
+    const defaultPvp = {
+        from: '',
+        to: '',
+        date: '',
+        word: '',
+        time: '',
+        level: '',
+        wpm: '',
+        accuracy: '',
+        inaccuracy: '',
+        isComplete: 'false',
+        champion: '',
+    };
     
     get(getGlobalPvp).then((snapshot) => {
         if(snapshot.val()){
             let pvpData = snapshot.val();
 
             var level = getLevelName(pvpData.level)
-            var status = pvpData.isComplete == false ? 'Ongoing Battle' : 'End Of Battle';
+            var status = pvpData.isComplete == 'false' ? 'Ongoing Battle' : 'End Of Battle';
 
-            if(status == 'Ongoing Battle'){
+            if(pvpData.from == ''){
+                showUsername = true;
+            }
+            else if(status == 'Ongoing Battle'){
                 $('#begin-battle').hide();
 
                 showUsername = false;
@@ -106,21 +134,31 @@ $( document ).ready(function() {
             else{
                 showUsername = true;
             }
-            
 
-            getUsername(showUsername)
-            
             $('#date-pvp').text(pvpData.date);
-            $('#challenger-pvp').text(pvpData.from)
-            $('#opponent-pvp').text(pvpData.to)
-            $('#level-pvp').text(level)
-            $('#time-pvp').text(pvpData.time)
-            $('#wpm-pvp').text(pvpData.wpm)
-            $('#accuracy-pvp').text(pvpData.accuracy)
-            $('#inaccuracy-pvp').text(pvpData.inaccuracy)
-            $('#status-pvp').text(status)
+            $('#challenger-pvp').text(pvpData.from);
+            $('#opponent-pvp').text(pvpData.to);
+            $('#level-pvp').text(level);
+            $('#time-pvp').text(pvpData.time);
+            $('#wpm-pvp').text(pvpData.wpm);
+            $('#accuracy-pvp').text(pvpData.accuracy);
+            $('#inaccuracy-pvp').text(pvpData.inaccuracy);
+            $('#status-pvp').text(status);
+
+            if(userVerified == true){
+                getUsername(showUsername);
+            }
+            else{
+                showSnackBar('User email is not verified');
+                $('a[value="global"], a[value="challenge"]').hide();
+            }
         }
-        else{ showSnackBar('Error getting information'); }
+        else{
+            set(getGlobalPvp, defaultPvp);
+            window.location.href = '../pages/pvp.html' + 
+                '?username=' + fromUsername;
+            showSnackBar('Error getting information'); 
+        }
     })
     .catch((error) => {
         showSnackBar('Error getting information');
@@ -132,9 +170,11 @@ $( document ).ready(function() {
             get(getUsername).then((snapshot) => {
                 if(snapshot.val()){
                     let usernameData = snapshot.val();
+
+                    let filteredUsernames = usernameData.filter(username => username !== fromUsername);
         
                     $("#list-username").select2({
-                        data: usernameData,
+                        data: filteredUsernames,
                     });
                 }
                 else{ showSnackBar('Error getting information'); }

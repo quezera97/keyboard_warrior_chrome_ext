@@ -13,7 +13,52 @@
         <main>
             <div>
                 <div id="snackbar"><span id="snackbar-text"></span></div>
-                <div class="top-container">
+                <div id="notification-top-container" class="top-container">
+                    <div>
+                        <button id="escape-button" class="icon-button" data-toggle="tooltip" data-placement="bottom" title="Escape"> 
+                            <img height="25px" src="/assets/esc.png" alt="">
+                        </button>
+                        <b style="font-weight: bold;" class="normal-text">Battle Notification</b>
+                    </div>
+                    <div>
+                        <b style="font-weight: bold;">VISIT: </b>
+                        <a href="https://youtu.be/DSG53BsUYd0?si=8MytIg2jxCvFhk_l" target="_blank">
+                            <img src="/assets/github.png" alt="Github" height="25px"> 
+                        </a>
+                        <a href="https://youtu.be/dQw4w9WgXcQ?si=2L8HPnnmMfrjDlu3" target="_blank">
+                            <img src="/assets/youtube.png" alt="YouTube" height="25px">
+                        </a>
+                    </div>
+                </div>
+                <div id="notification-challenge">
+                    <p id="notification-text">You have been challenged by <span id="challenger-pvp"></span>!</p>
+                    <div style="text-align: center; margin-top: 20%;">
+                        <button id="begin-battle" class="generate-custom" style="margin: 15px;">Begin Battle</button>
+                    </div>
+                </div>
+                <div id="pvp-challenge">
+                    <div id="pvp-top-container" class="top-container">
+                        <div class="timer">
+                            <span>Time:</span>
+                            <span id="timer">0</span>
+                        </div>
+                        <div>
+                            <span>Accuracy (%):</span>
+                            <span id="accuracy">0</span>
+                        </div>
+                        <div>
+                            <span>Inaccuracy (%):</span>
+                            <span id="inaccuracy">0</span>
+                        </div>
+                        <div>
+                            <span>Words/min:</span>
+                            <span id="wpm">0</span>
+                        </div>
+                    </div>
+                    <div class="display-container" id="quoteDisplay"><span></span></div>
+                    <div class="input-quote-container">
+                        <textarea class="quote-input" name="quoteInput" id="quoteInput" placeholder="Type Here!"></textarea>
+                    </div>
                 </div>
             </div>
         </main>

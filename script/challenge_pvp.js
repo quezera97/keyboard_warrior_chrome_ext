@@ -24,7 +24,7 @@ $( document ).ready(function() {
     }
 
     $('#body_challenge_pvp').keydown(function (e) {
-        if (e.key === 'Escape') {
+        if (e.key === 'Escape' || e.key === 'Tab') {
             e.preventDefault();
         }
     });
@@ -57,7 +57,6 @@ $( document ).ready(function() {
     checkInternetConnection();
 
     $("#quoteInput").focus();
-    $('#readyIndicator').hide();
     
     function checkInternetConnection() {
         const isOnline = navigator.onLine;
@@ -272,7 +271,7 @@ $( document ).ready(function() {
             wpm: wpm,
             accuracy: accuracy,
             inaccuracy: inaccuracy,
-            isComplete: false,
+            isComplete: 'false',
             champion: '',
         };
 

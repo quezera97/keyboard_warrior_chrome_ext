@@ -144,8 +144,17 @@ $( document ).ready(async function() {
             }
         })
         .catch((error) => {
-            console.error('Error fetching hall of fame data:', error);
+            showSnackBar('Error fetching hall of fame data:');
         });
+    }
 
+    var snackbar = $("#snackbar");
+    function showSnackBar(message) {
+        $('#snackbar-text').text(message);
+
+        snackbar.addClass("show");
+        setTimeout(function(){
+            snackbar.removeClass("show");
+        }, 3000);
     }
 });

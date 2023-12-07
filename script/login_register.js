@@ -168,7 +168,6 @@ $( document ).ready(function() {
                 showSnackBar('Email is already in use');
                 modal.css("display", "none");
             } else {
-                console.error(error.message);
                 showSnackBar('Invalid credentials');
                 modal.css("display", "none");
             }

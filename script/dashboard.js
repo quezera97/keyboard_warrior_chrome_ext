@@ -131,7 +131,8 @@ $( document ).ready(function() {
     $('#notification').click(function () {
         stopAndSetAudioPos();
 
-        window.location.href = '../pages/notification.html'
+        window.location.href = '../pages/notification.html' +
+            '?username=' + encodeURIComponent($('#username').text());
     });
 
     if(typeOfUser == 'spartan'){        
@@ -195,7 +196,7 @@ $( document ).ready(function() {
                                 return results;
                             })
                             .catch((error) => {
-                                console.error('Error checking user existence:', error.message);
+                                showSnackBar('Error checking user existence');
                                 return false;
                             });
                     }
