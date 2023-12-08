@@ -1,6 +1,6 @@
-import { initializeApp } from './firebase/firebase-app.js'
 import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
 import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.js'
+import { app, auth, database } from "./firebase/firebase-init.js";
 
 $( document ).ready(function() {
     $('#pvp-challenge, #pvp-top-container').hide();
@@ -39,20 +39,6 @@ $( document ).ready(function() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     let username = urlParams.get('username');
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyBYtSkWCVLBDWkR_UmL_ojguW1C6gZVPFw",
-        authDomain: "keyboardwarrior-c0a0b.firebaseapp.com",
-        projectId: "keyboardwarrior-c0a0b",
-        storageBucket: "keyboardwarrior-c0a0b.appspot.com",
-        messagingSenderId: "838198639101",
-        appId: "1:838198639101:web:cfe0a3eecc334ace418194",
-        measurementId: "G-ZC2XJ3JLGJ"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const database = getDatabase(app, "https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app");
 
     const getGlobalPvp = ref(database, 'pvp');
 
