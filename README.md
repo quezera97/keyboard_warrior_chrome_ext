@@ -20,5 +20,5 @@
 
 KBW: Speed up your typing! Timed tests, custom exercises & progress tracking for all levels. Enhance your skills on the go!
 
-### To Install <a href="https://chromewebstore.google.com/detail/keyboard-warrior-sparta/baakfnbonkakgheghpeadmkmkegeocjo" target="_blank">To-Do List</a> (Available on Google Chrome):
+### To Install <a href="https://chromewebstore.google.com/detail/keyboard-warrior-sparta/baakfnbonkakgheghpeadmkmkegeocjo" target="_blank">KBW - Keyboard Warrior</a> (Available on Google Chrome):
 <p>https://chromewebstore.google.com/detail/keyboard-warrior-sparta/baakfnbonkakgheghpeadmkmkegeocjo</p>
