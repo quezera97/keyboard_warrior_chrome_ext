@@ -8,6 +8,7 @@
   <img height="60" src="https://cdn.svgporn.com/logos/css-3.svg" width="60">
   <img height="60" src="https://cdn.svgporn.com/logos/javascript.svg" width="60">
   <img height="60" src="https://cdn.svgporn.com/logos/jquery.svg">
+  <img height="60" src="https://cdn.svgporn.com/logos/firebase.svg">
 </p>
 
 ### Screenshots:
