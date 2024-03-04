@@ -1,4 +1,4 @@
-## Keyboard Warrior - Sparta Chrome Extension
+## <a href="https://chromewebstore.google.com/detail/keyboard-warrior-sparta/baakfnbonkakgheghpeadmkmkegeocjo" target="_blank">Keyboard Warrior - Sparta</a> Chrome Extension
 
 ### Overview
 
