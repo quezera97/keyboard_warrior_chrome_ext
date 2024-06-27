@@ -1,7 +1,3 @@
-import { getDatabase, ref, set, get } from './firebase/firebase-database.js';
-import { getAuth, signOut, onAuthStateChanged  } from './firebase/firebase-auth.js';
-import { app, auth, database } from "./firebase/firebase-init.js";
-
 $( document ).ready(function() {
     $('#dummy-container').show();
     showLoadingIndicator();
@@ -104,7 +100,7 @@ $( document ).ready(function() {
 
         showDivFaction('ghost');
 
-        $('#username').text('Undead Warrior');
+        $('#username').text('Spartan');
 
         hideLoadingIndicator();
     }
@@ -115,12 +111,6 @@ $( document ).ready(function() {
         window.location.href = '../pages/user_profile.html'
     });
 
-    $('#pvp').click(function () {
-        stopAndSetAudioPos();
-
-        window.location.href = '../pages/pvp.html' + 
-            '?username=' + encodeURIComponent($('#username').text());
-    });
 
     $('#hall-of-fame').click(function () {
         stopAndSetAudioPos();
@@ -128,81 +118,9 @@ $( document ).ready(function() {
         window.location.href = '../pages/hall_of_fame.html'
     });
 
-    $('#notification').click(function () {
-        stopAndSetAudioPos();
+    var uid = localStorage.getItem('uid');
 
-        window.location.href = '../pages/notification.html' +
-            '?username=' + encodeURIComponent($('#username').text());
-    });
-
-    if(typeOfUser == 'spartan'){        
-        var uid = localStorage.getItem('uid');
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                if (user.emailVerified) {
-                    uid = user.uid;
-                    
-                    const usernameRef = ref(database, uid+'/username');
-    
-                    if(uid){
-                        setUserResults(uid, usernameRef, 'kids');
-                        setUserResults(uid, usernameRef, 'amateur');
-                        setUserResults(uid, usernameRef, 'pro');
-                        setUserResults(uid, usernameRef, 'legend');
-                    }
-
-                    function setUserResults(uid, usernameRef, level) {
-                        get(usernameRef)
-                            .then((snapshot) => {
-                                const username = snapshot.val();
-                
-                                $('#username').text(username != '' ? username : 'Spartan');
-                
-                                localStorage.setItem('username', username ?? 'Guest');
-                        });
-                
-                        const userRecordsRef = ref(database, uid+'/records/levels/'+level);
-                        
-                        get(userRecordsRef)
-                            .then((snapshot) => {
-                                const resultsFromFirebase = snapshot.val();
-                
-                                $(`#${level}-time-result`).text(resultsFromFirebase.time != '' ? resultsFromFirebase.time : 0);
-                                $(`#${level}-wpm-result`).text(resultsFromFirebase.wpm != '' ? resultsFromFirebase.wpm : 0);
-                                $(`#${level}-accuracy-result`).text(resultsFromFirebase.accuracy != '' ? resultsFromFirebase.accuracy : 0);
-                
-                                const results = {
-                                    time: resultsFromFirebase.time != '' ? resultsFromFirebase.time : 0,
-                                    wpm: resultsFromFirebase.wpm != '' ? resultsFromFirebase.wpm : 0,
-                                    accuracy: resultsFromFirebase.accuracy != '' ? resultsFromFirebase.accuracy : 0,
-                                };
-                
-                                localStorage.setItem(level, JSON.stringify(results));
-                
-                                return results;
-                            })
-                            .catch((error) => {
-                                showSnackBar('Error checking user existence');
-                                return false;
-                            });
-                    }
-                }
-                else{
-                    showSnackBar('User email is not verified');
-                }
-            }
-            else {
-                displayStatsLocalStorage('kids');
-                displayStatsLocalStorage('amateur');
-                displayStatsLocalStorage('pro');
-                displayStatsLocalStorage('legend');
-            }
-    
-            showDivFaction(uid);
-        });
-    }
-    else if(typeOfUser == 'ghost'){
+    if(typeOfUser == 'ghost'){
         setForGhostLogin();
     }
     else{

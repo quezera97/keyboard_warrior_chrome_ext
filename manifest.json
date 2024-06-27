@@ -1,18 +1,12 @@
 {
     "name": "Keyboard Warrior - Sparta",
-    "version": "1.6.1",
+    "version": "1.6.3",
     "description": "KBW: Speed up your typing! Timed tests, custom exercises & progress tracking for all levels. Enhance your skills on the go!",
     "manifest_version": 3,
     "author": "QueZera",  
     "action":{
         "default_popup": "dashboard.html",
         "default_title": "Keyboard Warrior"
-    },
-    "permissions": [
-        "storage"
-    ],
-    "content_security_policy": {
-        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; script-src-elem 'self' 'unsafe-inline' https://keyboardwarrior-c0a0b-default-rtdb.asia-southeast1.firebasedatabase.app"
     },
     "icons": {
         "16": "assets/logo-16.png",
